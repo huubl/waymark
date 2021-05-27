@@ -62,9 +62,6 @@ class Waymark_Submission {
 			$content .= '	<input type="hidden" name="waymark_action" value="public_add_map" />' . "\n";
 			$content .= '	<input type="hidden" name="waymark_security" value="' . wp_create_nonce('Waymark_Nonce') . '" />' . "\n";
 			
-			//Data
-			$content .= '	<textarea id="map_data" name="map_data" class="waymark-hidden"></textarea>' . "\n";
-			
 			//Title
 			$content .= '	<div class="waymark-control-group waymark-control-type-text" id="map_date-container">' . "\n";
 			$content .= '		<label class="waymark-control-label" for="map_date">' . __('Title', 'waymark') . '</label>' . "\n";

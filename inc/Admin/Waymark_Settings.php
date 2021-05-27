@@ -413,6 +413,15 @@ class Waymark_Settings {
 							'title' => '<span class="waymark-invisible">' . esc_html__('Meta', 'waymark') . '</span> ' . esc_html__('In Shortcode?', 'waymark'),									
 							'default' => Waymark_Config::get_setting('meta', 'inputs', 'meta_shortcode'),
 							'tip' => esc_attr__('Whether this content should be displayed when embedding a Map using the Shortcode.', 'waymark'),
+						),						
+						'meta_submission' => array(
+							'name' => 'meta_submission',
+							'id' => 'meta_submission',
+							'type' => 'boolean',
+							'class' => '',	
+							'title' => '<span class="waymark-invisible">' . esc_html__('Meta', 'waymark') . '</span> ' . esc_html__('Public Submissions?', 'waymark'),									
+							'default' => Waymark_Config::get_setting('meta', 'inputs', 'meta_submission'),
+							'tip' => esc_attr__('Public submissions allowed?', 'waymark'),
 						)
 					)																										
 				),

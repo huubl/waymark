@@ -25,7 +25,8 @@ class Waymark_Config {
 					'meta_type' => 'textarea_rich',
 					'meta_group' => '',
 					'meta_options' => '',
-					'meta_shortcode' => '0'
+					'meta_shortcode' => '0',
+					'meta_submission' => '0'					
 				)
 			),
 			'misc' => array(
