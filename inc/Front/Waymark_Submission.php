@@ -61,12 +61,22 @@ class Waymark_Submission {
 			$content  = '<form action="' . Waymark_Helper::http_url() . '" method="post" id="waymark-map-add" class="waymark-map-add">' . "\n";
 			$content .= '	<input type="hidden" name="waymark_action" value="public_add_map" />' . "\n";
 			$content .= '	<input type="hidden" name="waymark_security" value="' . wp_create_nonce('Waymark_Nonce') . '" />' . "\n";
-			$content .= '	<textarea id="map_data" name="map_data"></textarea>' . "\n";
-			$content .= '	<input type="text" name="map_title" />' . "\n";
-			$content .= '	<input type="submit" value="' . __('Submit', 'waymark') . '" class="button" />' . "\n";
+			
+			//Data
+			$content .= '	<textarea id="map_data" name="map_data" class="waymark-hidden"></textarea>' . "\n";
+			
+			//Title
+			$content .= '	<div class="waymark-control-group waymark-control-type-text" id="map_date-container">' . "\n";
+			$content .= '		<label class="waymark-control-label" for="map_date">' . __('Title', 'waymark') . '</label>' . "\n";
+			$content .= '		<div class="waymark-controls">' . "\n";
+			$content .= '			<input class="waymark-input" type="text" name="map_title" id="map_title" value="">' . "\n";
+			$content .= '		</div>' . "\n";
+			$content .= '	</div>' . "\n";
 
 			//Meta
-			$content .= $Map->create_form();		
+			//$content .= $Map->create_form();		
+
+			$content .= '	<input type="submit" value="' . __('Submit', 'waymark') . '" class="button button-primary button-large" />' . "\n";
 
 			$content .= '</form>' . "\n";
 			
