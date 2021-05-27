@@ -57,8 +57,7 @@ class Waymark_Content {
 
 			//Create Feed meta input
 			$Map = new Waymark_Map;		
-			$Map->set_input_type('meta');
-			$content = $Map->create_form();		
+//			$Map->set_input_type('meta');
 
 			$content  = '<form action="' . Waymark_Helper::http_url() . '" method="post" id="waymark-map-add" class="waymark-map-add">' . "\n";
 			$content .= '	<input type="hidden" name="waymark_action" value="public_add_map" />' . "\n";
@@ -66,6 +65,10 @@ class Waymark_Content {
 			$content .= '	<textarea id="map_data" name="map_data"></textarea>' . "\n";
 			$content .= '	<input type="text" name="map_title" />' . "\n";
 			$content .= '	<input type="submit" value="' . __('Submit', 'waymark') . '" class="button" />' . "\n";
+
+			//Meta
+			$content .= $Map->create_form();		
+
 			$content .= '</form>' . "\n";
 			
 			return $content;
