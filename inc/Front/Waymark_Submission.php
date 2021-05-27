@@ -74,7 +74,7 @@ class Waymark_Submission {
 			$content .= '	</div>' . "\n";
 
 			//Meta
-			//$content .= $Map->create_form();		
+			$content .= $Map->create_form();		
 
 			$content .= '	<input type="submit" value="' . __('Submit', 'waymark') . '" class="button button-primary button-large" />' . "\n";
 
