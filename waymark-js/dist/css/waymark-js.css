@@ -542,6 +542,9 @@
 	============= EDITOR =============
 	==================================
 */
+.waymark-map-container.waymark-is-editor div.waymark-edit-toolbar * {
+  box-sizing: unset;
+}
 .waymark-map-container.waymark-is-editor div.waymark-edit-toolbar a.waymark-edit-button {
   padding: 5px;
   color: #b42714;

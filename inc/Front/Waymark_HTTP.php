@@ -24,7 +24,7 @@ class Waymark_HTTP {
 			//WP loads normally			
 			return;
 		}
-			
+
 		//Action
 		if(array_key_exists('waymark_action', $_REQUEST)) {	
 			//Requires Map Data
@@ -61,6 +61,7 @@ class Waymark_HTTP {
 			
 				switch($_REQUEST['waymark_action']) {
 					// === AJAX Load ===
+					
 					case 'get_map_data' :
 						//Security
 						check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');	
@@ -84,6 +85,9 @@ class Waymark_HTTP {
 						}
 					
 						break;		
+					
+					// === Map Export ===
+					
 					case 'download_map_data' :
 						//Security
 						check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');						
@@ -115,12 +119,31 @@ class Waymark_HTTP {
 	
 						echo rawurldecode($_REQUEST['map_data']);
 						
-						break;	
+						break;
 				}	
 				
 				//That's it, that's all...
 				die();			
-			}									
+			
+			//Does not require Map data
+			} else {
+				switch($_REQUEST['waymark_action']) {				
+					// === Public Submissions ===
+					case'public_add_map' :
+						//Security
+						check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');											
+						
+						Waymark_Helper::debug($_REQUEST, false);						
+
+						$Map = new Waymark_Map;
+						$Map->set_data($_REQUEST);				
+						$post_id = $Map->create_post($_REQUEST['map_title']);					
+
+						Waymark_Helper::debug($post_id, false);	
+						
+						break;
+				}				
+			}
 		}
 	}
 }
