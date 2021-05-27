@@ -137,7 +137,9 @@ class Waymark_HTTP {
 
 						$Map = new Waymark_Map;
 						$Map->set_data($_REQUEST);				
-						$post_id = $Map->create_post($_REQUEST['map_title']);					
+						$post_id = $Map->create_post($_REQUEST['map_title'], array(
+							'post_status' => 'draft'
+						));					
 
 						Waymark_Helper::debug($post_id, false);	
 						
