@@ -59,6 +59,9 @@ class Waymark_Config {
 					'elevation_colour' => '#b42714',
 					'elevation_initial' => '1'
 				),				
+				'submission_options' => array(
+					'allow_submission' => '0'
+				),
 				'advanced' => array(
 					'debug_mode' => '0'
 				)

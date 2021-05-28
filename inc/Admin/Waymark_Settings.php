@@ -466,7 +466,8 @@ class Waymark_Settings {
 		
 		//Waymark_Helper::debug($basemap_options);
 		
-		//Misc
+		// ==================== Misc ====================
+		
 		$this->tabs['misc'] = array(
 			'name' => esc_html__('Misc.', 'waymark'),
 			'description' => '',
@@ -566,7 +567,9 @@ class Waymark_Settings {
 						)													
 					)																
 				),
-
+				
+				//Collections
+				
 				'collection_options' => array(
 					'title' => esc_html__('Collection Options', 'waymark'),
 					'description' => esc_html__('How Collections are displayed.', 'waymark'),
@@ -589,6 +592,8 @@ class Waymark_Settings {
 						)											
 					)											
 				),
+
+				//Shortcode
 
 				'shortcode_options' => array(
 					'title' => esc_html__('Shortcode Options', 'waymark'),
@@ -619,7 +624,9 @@ class Waymark_Settings {
 							)
 						)												
 					)											
-				),				
+				),	
+				
+				//Elevation			
 
 				'elevation_options' => array(
 					'title' => esc_html__('Elevation Options', 'waymark'),
@@ -672,6 +679,8 @@ class Waymark_Settings {
 						)														
 					)																					
 				),
+				
+				//Editor
 
 				'editor_options' => array(
 					'title' => esc_html__('Editor Options', 'waymark'),
@@ -704,6 +713,25 @@ class Waymark_Settings {
 						)																	
 					)											
 				),
+
+				//Submissions
+
+				'submission_options' => array(
+					'title' => esc_html__('Submission Options', 'waymark'),
+					'description' => esc_html__('Public submissions...', 'waymark'),
+					'fields' => array(
+						'allow_submission' => array(
+							'name' => 'allow_submission',
+							'id' => 'allow_submission',
+							'type' => 'boolean',
+							'title' => esc_html__('Allow Submissions?', 'waymark'),
+							'default' => Waymark_Config::get_setting('misc', 'submission_options', 'allow_submission'),
+							'tip' => esc_attr__('Whether to allow submissions.', 'waymark')
+						)																	
+					)											
+				),
+				
+				//Advanced
 
 				'advanced' => array(
 					'title' => esc_html__('Advanced', 'waymark'),
