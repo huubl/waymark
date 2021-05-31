@@ -3,7 +3,11 @@
 class Waymark_AJAX {
 	
 	function __construct() {
+		//Front-end & Admin
 		add_action('wp_ajax_waymark_read_file', array($this, 'read_file'));				
+		add_action('wp_ajax_nopriv_waymark_read_file', array($this, 'read_file'));				
+
+		//Admin only
 		add_action('wp_ajax_waymark_get_attatchment_meta', array($this, 'get_attatchment_meta'));				
 		//add_action('wp_ajax_waymark_shortcode_form', array($this, 'shortcode_form'));				
 		

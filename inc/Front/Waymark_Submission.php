@@ -2,10 +2,6 @@
 	
 class Waymark_Submission {
 	function __construct() {
-		if(! Waymark_Config::get_setting('misc', 'submission_options', 'allow_submission')) {
-			return;
-		}
-	
 		add_filter('the_content', array($this, 'the_content'));
 	}
 
