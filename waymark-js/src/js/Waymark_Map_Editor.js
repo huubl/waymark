@@ -453,26 +453,77 @@ function Waymark_Map_Editor() {
 			processData: false,
 			contentType: false,
 		  success: function(response) {		
-		  
-		  	console.log(response);
-		  	
-		  	return;
-		  
 				if(Waymark.get_property(waymark_settings, 'misc', 'advanced', 'debug_mode') == true) {
 					console.log(response);		  	
 				}
-		  
-			  if(response === null) {
-					console.log(waymark_js_lang.error_message_prefix + ': ' + waymark_js_lang.error_file_upload);					  
+		  	
+		  	switch(input.attr('name')) {
+		  		case 'add_file' :
+						if(response === null) {
+							console.log(waymark_js_lang.error_message_prefix + ': ' + waymark_js_lang.error_file_upload);					  
 					
-					return;
-			  } else if(response.error) {
-					console.log(waymark_js_lang.error_message_prefix + ': ' + response.error);			
+							return;
+						} else if(response.error) {
+							console.log(waymark_js_lang.error_message_prefix + ': ' + response.error);			
 					
-					return;		  			  
-			  }
-			  
-				Waymark.load_file_contents(response.file_contents, response.file_type);  
+							return;		  			  
+						}
+				
+						Waymark.load_file_contents(response.file_contents, response.file_type);  
+
+		  			break;
+
+		  		case 'add_photo' :
+		  			//Default centre
+						var marker_latlng = Waymark.map.getCenter();		
+
+						//!!! To-do - create function for duplicate code
+
+						if(response.GPSLatitudeNum && !isNaN(response.GPSLatitudeNum) && response.GPSLongitudeNum && !isNaN(response.GPSLongitudeNum)) {
+							console.log(waymark_js_lang.info_message_prefix + ': Image location metadata (EXIF) detected!');
+
+							//Get latlng
+							marker_latlng = L.latLng(response.GPSLatitudeNum, response.GPSLongitudeNum);
+						
+							//Center on it 
+							Waymark.map.setView(marker_latlng);		
+						}				
+
+						//!!! To-do - create function to create markers
+						
+						var marker_json = {
+							"geometry": {
+								"type": "Point", 
+								"coordinates": [ marker_latlng.lng, marker_latlng.lat ]
+							}, 
+							"type": "Feature", 
+							
+							
+							//!!! To-do - get sizes from AJAX
+							
+							"properties": Object.assign(Waymark.config.marker_data_defaults, {
+								'image_thumbnail_url' : response.attachment_url,
+								'image_medium_url' : response.attachment_url,
+								'image_large_url' : response.attachment_url,
+								'image_full_url' : response.attachment_url,																								
+							})
+						};
+					
+						//Add Marker
+						Waymark.map_data.addData(marker_json);
+
+						//Save
+
+						//!!! To-do - move this into Waymark.map_was_edited()	  	  
+
+						Waymark.save_data_layer();		 
+						 		
+		  			break;		  			
+		  	}
+		  	
+		  	
+		  	return;
+
 				Waymark.map_was_edited();								
 			}
 		});												
