@@ -103,6 +103,30 @@ class Waymark_AJAX {
 							}
 							
 							break;
+						case 'add_photo' :
+// 							if ( ! function_exists( 'wp_handle_upload' ) ) {
+// 									require_once( ABSPATH . 'wp-admin/includes/file.php' );
+// 							}
+ 
+ 							//Upload
+ 							$attachment_id = media_handle_upload($file_key, 0);
+
+							$attachment_url = wp_get_attachment_url($attachment_id);
+
+							$response = array(
+								'attachment_id' => $attachment_id,
+								'attachment_url' => $attachment_url								
+							);
+							
+							//Meta?
+							$attachment_metadata = wp_get_attachment_metadata($attachment_id);
+							if(array_key_exists('image_meta', $attachment_metadata) && is_array($attachment_metadata['image_meta'])) {
+								$response = array_merge($response, $attachment_metadata['image_meta']);							
+							}
+							
+							$response_json = json_encode($response);
+  
+ 							break;
 					}								
 				//WP error
 				} else {
