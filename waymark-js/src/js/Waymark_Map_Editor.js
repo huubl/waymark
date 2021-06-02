@@ -186,21 +186,13 @@ function Waymark_Map_Editor() {
 				button.innerHTML = '<i class="ion ion-image"></i>';
 				button.setAttribute('title', waymark_js_lang.add_photo_title);
 				button.onclick = function() {
-					//Create a Marker (use map center to begin with
-					var map_center = Waymark.map.getCenter();		
-
 					//Use Media Library (back-end only)?				
-					if(typeof wp.media != 'undefined' && Waymark.get_property(waymark_settings, 'misc', 'editor_options', 'media_library_uploads') == true) {
+					if(typeof wp.media != 'undefined') {
+//					if(typeof wp.media != 'undefined' && Waymark.get_property(waymark_settings, 'misc', 'editor_options', 'media_library_uploads') == true) {
 						//Thanks to: https://mycyberuniverse.com/integration-wordpress-media-uploader-plugin-options-page.html
 						wp.media.editor.send.attachment = function(props, attachment) {
-							var marker_json = {
-								"geometry": {
-									"type": "Point", 
-									"coordinates": [ map_center.lng, map_center.lat ]
-								}, 
-								"type": "Feature", 
-								"properties": Object.assign({}, Waymark.config.marker_data_defaults)
-							};
+							//Create JSON
+							var marker_json = Waymark.create_marker_json(Waymark.map.getCenter());
 													
 							//SET URLs
 						
@@ -311,16 +303,8 @@ function Waymark_Map_Editor() {
 				button.innerHTML = '<i class="ion ion-location"></i>';
 				button.setAttribute('title', waymark_js_lang.add_marker_title);
 				button.onclick = function() {
-					var map_center = Waymark.map.getCenter();		
-				
-			    var marker_json = {
-			      "geometry": {
-			        "type": "Point", 
-			        "coordinates": [ map_center.lng, map_center.lat ]
-		        }, 
-			      "type": "Feature", 
-			      "properties": Object.assign({}, Waymark.config.marker_data_defaults)
-			    };
+					//Create JSON
+			    var marker_json = Waymark.create_marker_json(Waymark.map.getCenter());
 					
 					//Add Marker
 					Waymark.map_data.addData(marker_json);
@@ -478,36 +462,36 @@ function Waymark_Map_Editor() {
 						var marker_latlng = Waymark.map.getCenter();		
 
 						//!!! To-do - create function for duplicate code
-
-						if(response.GPSLatitudeNum && !isNaN(response.GPSLatitudeNum) && response.GPSLongitudeNum && !isNaN(response.GPSLongitudeNum)) {
-							console.log(waymark_js_lang.info_message_prefix + ': Image location metadata (EXIF) detected!');
-
-							//Get latlng
-							marker_latlng = L.latLng(response.GPSLatitudeNum, response.GPSLongitudeNum);
 						
+						//Extract EXIF location
+						if(marker_latlng = Waymark.get_image_exif(response)) {
 							//Center on it 
 							Waymark.map.setView(marker_latlng);		
-						}				
+						}
 
 						//!!! To-do - create function to create markers
 						
-						var marker_json = {
-							"geometry": {
-								"type": "Point", 
-								"coordinates": [ marker_latlng.lng, marker_latlng.lat ]
-							}, 
-							"type": "Feature", 
-							
-							
-							//!!! To-do - get sizes from AJAX
-							
-							"properties": Object.assign(Waymark.config.marker_data_defaults, {
-								'image_thumbnail_url' : response.attachment_url,
-								'image_medium_url' : response.attachment_url,
-								'image_large_url' : response.attachment_url,
-								'image_full_url' : response.attachment_url,																								
-							})
-						};
+
+						//Create JSON
+						var marker_json = Waymark.create_marker_json(marker_latlng);
+
+// 						var marker_json = {
+// 							"geometry": {
+// 								"type": "Point", 
+// 								"coordinates": [ marker_latlng.lng, marker_latlng.lat ]
+// 							}, 
+// 							"type": "Feature", 
+// 							
+// 							
+// 							//!!! To-do - get sizes from AJAX
+// 							
+// 							"properties": Object.assign(Waymark.config.marker_data_defaults, {
+// 								'image_thumbnail_url' : response.attachment_url,
+// 								'image_medium_url' : response.attachment_url,
+// 								'image_large_url' : response.attachment_url,
+// 								'image_full_url' : response.attachment_url,																								
+// 							})
+// 						};
 					
 						//Add Marker
 						Waymark.map_data.addData(marker_json);

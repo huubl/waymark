@@ -860,6 +860,29 @@ function Waymark_Map() {
 		return colour;						
 	}
 
+	this.create_marker_json = function(lat_lng, properties) {
+		var marker_json = {
+			"geometry": {
+				"type": "Point", 
+				"coordinates": [ lat_lng.lng, lat_lng.lat ]
+			}, 
+			"type": "Feature", 
+			"properties": Object.assign(Waymark.config.marker_data_defaults, properties)
+		};	
+		
+		return marker_json;
+	}
+	
+	this.get_image_exif = function(data) {
+		if(data.GPSLatitudeNum && !isNaN(data.GPSLatitudeNum) && data.GPSLongitudeNum && !isNaN(data.GPSLongitudeNum)) {
+			console.log(waymark_js_lang.info_message_prefix + ': Image location metadata (EXIF) detected!');
+
+			return L.latLng(data.GPSLatitudeNum, data.GPSLongitudeNum);
+		}	
+		
+		return false;
+	}
+
 /*
 	==================================
 	======== ABSTRACT METHODS ========
