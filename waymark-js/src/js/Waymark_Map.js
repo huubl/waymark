@@ -167,6 +167,17 @@ function Waymark_Map() {
 	this.get_property = function(obj, ...args) {
   	return args.reduce((obj, level) => obj && obj[level], obj)
 	}
+	
+	this.debug = function(thing) {
+		if(this.get_property(waymark_settings, 'misc', 'advanced', 'debug_mode') == true) {
+			if(typeof thing == 'string') {
+				console.log(waymark_js_lang.info_message_prefix + ': ' + thing);			
+			} else {
+				console.log(waymark_js_lang.info_message_prefix + ': ');			
+				console.log(thing);
+			}
+		}
+	}
 
 	this.title_case = function(str) {
     return str.replace(/(?:^|\s)\w/g, function(match) {
@@ -870,15 +881,19 @@ function Waymark_Map() {
 			"properties": Object.assign(Waymark.config.marker_data_defaults, properties)
 		};	
 		
+		Waymark.debug(marker_json);
+		
 		return marker_json;
 	}
 	
-	this.get_image_exif = function(data) {
+	this.get_exif_latlng = function(data) {
 		if(data.GPSLatitudeNum && !isNaN(data.GPSLatitudeNum) && data.GPSLongitudeNum && !isNaN(data.GPSLongitudeNum)) {
-			console.log(waymark_js_lang.info_message_prefix + ': Image location metadata (EXIF) detected!');
+			Waymark.debug('Image location metadata (EXIF) detected!');
 
 			return L.latLng(data.GPSLatitudeNum, data.GPSLongitudeNum);
-		}	
+		}	else {
+			Waymark.debug('Image location metadata (EXIF) NOT detected.');							  			
+		}
 		
 		return false;
 	}
