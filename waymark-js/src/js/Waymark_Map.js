@@ -897,6 +897,25 @@ function Waymark_Map() {
 		
 		return false;
 	}
+	
+	this.get_image_sizes = function(data, fallback) {
+		var image_sizes = {};
+		
+		//Grab these
+		var sizes = ['thumbnail', 'medium', 'large', 'full'];
+		for(i in sizes) {
+			//Use fallback
+			image_sizes['image_' + sizes[i] + '_url'] = fallback;
+			
+			//We have the data we want
+			if(typeof data[sizes[i]] !== 'undefined' && typeof data[sizes[i]]['url'] !== 'undefined') {
+				//Use it
+				image_sizes['image_' + sizes[i] + '_url'] = data[sizes[i]]['url'];
+			}
+		}
+		
+		return image_sizes;			
+	}
 
 /*
 	==================================

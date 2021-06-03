@@ -190,35 +190,14 @@ function Waymark_Map_Editor() {
 					if(typeof wp.media != 'undefined') {
 //					if(typeof wp.media != 'undefined' && Waymark.get_property(waymark_settings, 'misc', 'editor_options', 'media_library_uploads') == true) {
 						//Thanks to: https://mycyberuniverse.com/integration-wordpress-media-uploader-plugin-options-page.html
-						wp.media.editor.send.attachment = function(props, attachment) {												
-							//SET URLs
-						
-							var image_sizes = {};
-						
-							//Thumb
-							image_sizes.image_thumbnail_url = attachment.url;
-							if(typeof attachment.sizes.thumbnail !== 'undefined') {
-								image_sizes.image_thumbnail_url = attachment.sizes.thumbnail.url;
+						wp.media.editor.send.attachment = function(props, attachment) {		
+							Waymark.debug(attachment);
+							
+							//Ensure we have the data we want
+							if(typeof attachment.url === 'undefined') {
+								return false;							
 							}
-
-							//Medium
-							image_sizes.image_medium_url = attachment.url;
-							if(typeof attachment.sizes.medium !== 'undefined') {
-								image_sizes.image_medium_url = attachment.sizes.medium.url;
-							}
-						
-							//Large
-							image_sizes.image_large_url = attachment.url;				    												    						    
-							if(typeof attachment.sizes.large !== 'undefined') {
-								image_sizes.image_large_url = attachment.sizes.large.url;
-							}
-
-							//Full
-							image_sizes.image_full_url = attachment.url;
-							if(typeof attachment.sizes.full !== 'undefined') {
-								image_sizes.image_full_url = attachment.sizes.full.url;
-							}
-
+							
 							//Get Photo EXIF
 							var form_data = new FormData();
 							form_data.append('waymark_security', waymark_ajax_security);			
@@ -249,6 +228,9 @@ function Waymark_Map_Editor() {
 										//Center on it 
 										Waymark.map.setView(marker_latlng);		
 									}
+
+									//Get Image URLs
+									var image_sizes = Waymark.get_image_sizes(attachment.sizes, attachment.url);
 
 									//Create JSON
 									var marker_json = Waymark.create_marker_json(marker_latlng, image_sizes);
@@ -446,22 +428,25 @@ function Waymark_Map_Editor() {
 		  			break;
 
 		  		case 'add_photo' :
+		  			//Ensure we have the data we want
+						if(typeof response.url === 'undefined') {
+							return false;							
+						}
+
 		  			//Default centre
 						var marker_latlng = Waymark.map.getCenter();		
 
-						//!!! To-do - create function for duplicate code
-						
 						//Extract EXIF location
 						if(marker_latlng = Waymark.get_exif_latlng(response)) {
 							//Center on it 
 							Waymark.map.setView(marker_latlng);		
 						}
 
-						//!!! To-do - create function to create markers
-						
+						//Get Image URLs
+						var image_sizes = Waymark.get_image_sizes(response.sizes, response.url);
 
 						//Create JSON
-						var marker_json = Waymark.create_marker_json(marker_latlng);
+						var marker_json = Waymark.create_marker_json(marker_latlng, image_sizes);
 
 // 						var marker_json = {
 // 							"geometry": {
