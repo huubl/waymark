@@ -8614,7 +8614,7 @@ function Waymark_Map_Editor() {
 		Waymark.map.addControl(new edit_toolbar_control());	
 	},
 	
-	this.handle_file_upload = function(input) {
+	this.handle_file_upload = function(input, data = {}) {
 		Waymark = this;
 
 		//Create form data
@@ -8678,8 +8678,35 @@ function Waymark_Map_Editor() {
 						//!!! To-do - move this into Waymark.map_was_edited()	  	  
 
 						Waymark.save_data_layer();		 
+						 								 		
+		  			break;
+
+		  		case 'marker_photo' :
+		  			//Ensure we have the data we want
+						if(typeof response.url === 'undefined') {
+							return false;							
+						}
+
+						//Get Image URLs
+						var image_sizes = Waymark.get_image_sizes(response.sizes, response.url);
+						
+						//Update data
+						data.feature.properties = Object.assign(data.feature.properties, image_sizes);
+
+						//Update preview
+						data.img_view.attr('href', data.feature.properties.image_large_url);
+						jQuery('img', data.img_view).attr('src', data.feature.properties.image_thumbnail_url);
+												
+						//Update input
+						data.img_input.val(data.feature.properties.image_large_url);
+
+						//Save
+
+						//!!! To-do - move this into Waymark.map_was_edited()	  	  
+
+						Waymark.save_data_layer();		 
 						 		
-		  			break;		  			
+		  			break;		  					  			
 		  	}
 		  	
 		  	
@@ -9048,11 +9075,15 @@ function Waymark_Map_Editor() {
 								var photo_input = jQuery('<input />')
 									.attr({
 										'type': 'file',
-										'name': 'add_photo'
+										'name': 'marker_photo'
 									})
 									.css('display', 'none')
 									.change(function() {
-										Waymark.handle_file_upload(jQuery(this));
+										Waymark.handle_file_upload(jQuery(this), {
+											'feature': feature,
+											'img_view': img_view,
+											'img_input': img_input											
+										});
 									});		
 										
 								jQuery('#waymark-edit-toolbar').append(photo_input);

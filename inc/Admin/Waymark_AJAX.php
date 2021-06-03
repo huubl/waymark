@@ -103,6 +103,7 @@ class Waymark_AJAX {
 							}
 							
 							break;
+						case 'marker_photo' :
 						case 'add_photo' :
 // 							if ( ! function_exists( 'wp_handle_upload' ) ) {
 // 									require_once( ABSPATH . 'wp-admin/includes/file.php' );
