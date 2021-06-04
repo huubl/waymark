@@ -6922,7 +6922,9 @@ var waymark_js_localize = {
 	"error_file_type" : "This file type is not supported.",		
 	"error_file_conversion" : "Could not convert this file to GeoJSON.",		
 	"error_file_upload" : "File upload error.",		
-	"error_photo_meta" : "Could not retrieve Photo metadata."
+	"error_photo_meta" : "Could not retrieve Photo metadata.",
+	'info_exif_yes' : "Image location metadata (EXIF) detected!",
+	'info_exif_no' : "Image location metadata (EXIF) NOT detected."
 };
 
 if(typeof waymark_js_lang === 'undefined') {
@@ -7765,11 +7767,11 @@ function Waymark_Map() {
 	
 	this.get_exif_latlng = function(data) {
 		if(data.GPSLatitudeNum && !isNaN(data.GPSLatitudeNum) && data.GPSLongitudeNum && !isNaN(data.GPSLongitudeNum)) {
-			Waymark.debug('Image location metadata (EXIF) detected!');
+			Waymark.debug(waymark_js_lang.info_exif_yes);
 
 			return L.latLng(data.GPSLatitudeNum, data.GPSLongitudeNum);
 		}	else {
-			Waymark.debug('Image location metadata (EXIF) NOT detected.');							  			
+			Waymark.debug(waymark_js_lang.info_exif_no);							  			
 		}
 		
 		return false;
