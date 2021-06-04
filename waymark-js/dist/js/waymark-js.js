@@ -7750,14 +7750,18 @@ function Waymark_Map() {
 		return colour;						
 	}
 
-	this.create_marker_json = function(lat_lng, properties) {
+	this.create_marker_json = function(lat_lng, properties = {}) {
+		Waymark.debug(Waymark.config.marker_data_defaults);
+	
+		var marker_properties = Object.assign({}, Waymark.config.marker_data_defaults, properties);
+	
 		var marker_json = {
 			"geometry": {
 				"type": "Point", 
 				"coordinates": [ lat_lng.lng, lat_lng.lat ]
 			}, 
 			"type": "Feature", 
-			"properties": Object.assign(Waymark.config.marker_data_defaults, properties)
+			"properties": marker_properties
 		};	
 		
 		Waymark.debug(marker_json);
@@ -8448,7 +8452,9 @@ function Waymark_Map_Editor() {
 									var marker_latlng = Waymark.map.getCenter();		
 					
 									//Extract EXIF location
-									if(marker_latlng = Waymark.get_exif_latlng(response)) {
+									if(latlng = Waymark.get_exif_latlng(response)) {
+										marker_latlng = latlng;
+	
 										//Center on it 
 										Waymark.map.setView(marker_latlng);		
 									}
@@ -8661,11 +8667,13 @@ function Waymark_Map_Editor() {
 						var marker_latlng = Waymark.map.getCenter();		
 
 						//Extract EXIF location
-						if(marker_latlng = Waymark.get_exif_latlng(response)) {
+						if(latlng = Waymark.get_exif_latlng(response)) {
+							marker_latlng = latlng;
+							
 							//Center on it 
 							Waymark.map.setView(marker_latlng);		
 						}
-
+						
 						//Get Image URLs
 						var image_sizes = Waymark.get_image_sizes(response.sizes, response.url);
 
@@ -8693,7 +8701,7 @@ function Waymark_Map_Editor() {
 						var image_sizes = Waymark.get_image_sizes(response.sizes, response.url);
 						
 						//Update data
-						data.feature.properties = Object.assign(data.feature.properties, image_sizes);
+						data.feature.properties = Object.assign({}, data.feature.properties, image_sizes);
 
 						//Update preview
 						data.img_view.attr('href', data.feature.properties.image_large_url);
@@ -9054,7 +9062,7 @@ function Waymark_Map_Editor() {
 									var image_sizes = Waymark.get_image_sizes(attachment.sizes, attachment.url);
 
 									//Update data
-									feature.properties = Object.assign(feature.properties, image_sizes);
+									feature.properties = Object.assign({}, feature.properties, image_sizes);
 																							
 									//Update preview
 									img_view.attr('href', feature.properties.image_large_url);

@@ -873,14 +873,18 @@ function Waymark_Map() {
 		return colour;						
 	}
 
-	this.create_marker_json = function(lat_lng, properties) {
+	this.create_marker_json = function(lat_lng, properties = {}) {
+		Waymark.debug(Waymark.config.marker_data_defaults);
+	
+		var marker_properties = Object.assign({}, Waymark.config.marker_data_defaults, properties);
+	
 		var marker_json = {
 			"geometry": {
 				"type": "Point", 
 				"coordinates": [ lat_lng.lng, lat_lng.lat ]
 			}, 
 			"type": "Feature", 
-			"properties": Object.assign(Waymark.config.marker_data_defaults, properties)
+			"properties": marker_properties
 		};	
 		
 		Waymark.debug(marker_json);
