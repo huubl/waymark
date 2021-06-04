@@ -141,7 +141,9 @@ class Waymark_HTTP {
 							'post_status' => 'draft'
 						));					
 
-						Waymark_Helper::debug($post_id, false);	
+						Waymark_Helper::debug(get_permalink($post_id));	
+						
+						die;
 						
 						break;
 				}				

@@ -62,7 +62,9 @@ class Waymark_Meta {
 			'error_file_type' => esc_attr__('This file type is not supported.', 'waymark'),		
 			'error_file_conversion' => esc_attr__('Could not convert this file to GeoJSON.', 'waymark'),		
 			'error_file_upload' => esc_attr__('File upload error.', 'waymark'),		
-			'error_photo_meta' => esc_attr__('Could not retrieve Photo metadata.', 'waymark')
+			'error_photo_meta' => esc_attr__('Could not retrieve Photo metadata.', 'waymark'),
+			'info_exif_yes' => esc_attr__('Image location metadata (EXIF) detected!', 'waymark'),
+			'info_exif_no' => esc_attr__('Image location metadata (EXIF) NOT detected.', 'waymark')
 		));
 		wp_enqueue_script('waymark-js');		
 	}

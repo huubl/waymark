@@ -3,7 +3,11 @@
 class Waymark_AJAX {
 	
 	function __construct() {
+		//Front-end & Admin
 		add_action('wp_ajax_waymark_read_file', array($this, 'read_file'));				
+		add_action('wp_ajax_nopriv_waymark_read_file', array($this, 'read_file'));				
+
+		//Admin only
 		add_action('wp_ajax_waymark_get_attatchment_meta', array($this, 'get_attatchment_meta'));				
 		//add_action('wp_ajax_waymark_shortcode_form', array($this, 'shortcode_form'));				
 		
@@ -99,6 +103,51 @@ class Waymark_AJAX {
 							}
 							
 							break;
+						case 'marker_photo' :
+						case 'add_photo' :
+// 							if ( ! function_exists( 'wp_handle_upload' ) ) {
+// 									require_once( ABSPATH . 'wp-admin/includes/file.php' );
+// 							}
+ 
+ 							//Upload
+ 							$attachment_id = media_handle_upload($file_key, 0);
+
+							$attachment_url = wp_get_attachment_url($attachment_id);
+
+							$response = array(
+								'url' => $attachment_url								
+							);
+							
+							//Meta?
+							$attachment_metadata = wp_get_attachment_metadata($attachment_id);
+							
+							//Image Meta
+							if(array_key_exists('image_meta', $attachment_metadata) && is_array($attachment_metadata['image_meta'])) {
+								//Location EXIF
+								if(array_key_exists('GPSLatitudeNum', $attachment_metadata['image_meta']) && array_key_exists('GPSLongitudeNum', $attachment_metadata['image_meta'])) {
+									$response = array_merge($response, array(
+										'GPSLatitudeNum' => $attachment_metadata['image_meta']['GPSLatitudeNum'],
+										'GPSLongitudeNum' => $attachment_metadata['image_meta']['GPSLongitudeNum']										
+									));							
+								}
+							}
+
+							//Sizes
+							if(array_key_exists('sizes', $attachment_metadata) && is_array($attachment_metadata['sizes'])) {
+								//Each size
+								foreach($attachment_metadata['sizes'] as $size_key => &$size) {
+									//Add URL
+									$size['url'] = wp_get_attachment_image_url($attachment_id, $size_key);
+								}
+							
+								$response = array_merge($response, array(
+									'sizes' => $attachment_metadata['sizes']
+								));
+							}
+							
+							$response_json = json_encode($response);
+  
+ 							break;
 					}								
 				//WP error
 				} else {

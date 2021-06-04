@@ -45,7 +45,9 @@ var waymark_js_localize = {
 	"error_file_type" : "This file type is not supported.",		
 	"error_file_conversion" : "Could not convert this file to GeoJSON.",		
 	"error_file_upload" : "File upload error.",		
-	"error_photo_meta" : "Could not retrieve Photo metadata."
+	"error_photo_meta" : "Could not retrieve Photo metadata.",
+	'info_exif_yes' : "Image location metadata (EXIF) detected!",
+	'info_exif_no' : "Image location metadata (EXIF) NOT detected."
 };
 
 if(typeof waymark_js_lang === 'undefined') {
@@ -166,6 +168,17 @@ function Waymark_Map() {
 	//Thanks! https://stackoverflow.com/questions/2631001/test-for-existence-of-nested-javascript-object-key
 	this.get_property = function(obj, ...args) {
   	return args.reduce((obj, level) => obj && obj[level], obj)
+	}
+	
+	this.debug = function(thing) {
+		if(this.get_property(waymark_settings, 'misc', 'advanced', 'debug_mode') == true) {
+			if(typeof thing == 'string') {
+				console.log(waymark_js_lang.info_message_prefix + ': ' + thing);			
+			} else {
+				console.log(waymark_js_lang.info_message_prefix + ': ');			
+				console.log(thing);
+			}
+		}
 	}
 
 	this.title_case = function(str) {
@@ -858,6 +871,56 @@ function Waymark_Map() {
 		}
 		
 		return colour;						
+	}
+
+	this.create_marker_json = function(lat_lng, properties = {}) {
+		Waymark.debug(Waymark.config.marker_data_defaults);
+	
+		var marker_properties = Object.assign({}, Waymark.config.marker_data_defaults, properties);
+	
+		var marker_json = {
+			"geometry": {
+				"type": "Point", 
+				"coordinates": [ lat_lng.lng, lat_lng.lat ]
+			}, 
+			"type": "Feature", 
+			"properties": marker_properties
+		};	
+		
+		Waymark.debug(marker_json);
+		
+		return marker_json;
+	}
+	
+	this.get_exif_latlng = function(data) {
+		if(data.GPSLatitudeNum && !isNaN(data.GPSLatitudeNum) && data.GPSLongitudeNum && !isNaN(data.GPSLongitudeNum)) {
+			Waymark.debug(waymark_js_lang.info_exif_yes);
+
+			return L.latLng(data.GPSLatitudeNum, data.GPSLongitudeNum);
+		}	else {
+			Waymark.debug(waymark_js_lang.info_exif_no);							  			
+		}
+		
+		return false;
+	}
+	
+	this.get_image_sizes = function(data, fallback) {
+		var image_sizes = {};
+		
+		//Grab these
+		var sizes = ['thumbnail', 'medium', 'large', 'full'];
+		for(i in sizes) {
+			//Use fallback
+			image_sizes['image_' + sizes[i] + '_url'] = fallback;
+			
+			//We have the data we want
+			if(typeof data[sizes[i]] !== 'undefined' && typeof data[sizes[i]]['url'] !== 'undefined') {
+				//Use it
+				image_sizes['image_' + sizes[i] + '_url'] = data[sizes[i]]['url'];
+			}
+		}
+		
+		return image_sizes;			
 	}
 
 /*
