@@ -14,6 +14,10 @@ class Waymark_JS {
 		wp_register_style('waymark-js', Waymark_Helper::asset_url('dist/waymark-js/css/waymark-js.min.css'), array(), Waymark_Config::get_version());
 		wp_enqueue_style('waymark-js');		
 		wp_register_script('waymark-js', Waymark_Helper::asset_url('dist/waymark-js/js/waymark-js.min.js'), array('jquery'), Waymark_Config::get_version(), true);		
+		wp_localize_script('waymark-js', 'waymark_js', array(
+			//AJAX
+			'ajaxurl' => admin_url('admin-ajax.php')
+		));
 		wp_localize_script('waymark-js', 'waymark_js_lang', array(
 			//Viewer
 			'action_fullscreen_activate' => esc_attr__('View Fullscreen', 'waymark'),		
