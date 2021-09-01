@@ -466,11 +466,21 @@ class Waymark_Settings {
 			)			
 		);	
 
+		//If public
+		if(! in_array('meta', Waymark_Config::get_setting('submission', 'submission_options', 'editor_features'))) {
+			//Hide roles
+			$this->tabs['meta']
+									 ['sections']
+									 	['inputs']
+									 		['fields']
+									 			['meta_submission']
+									 				['class'] .= ' waymark-hidden';
+		}
+
+
 		//Prepare Basemap values for editor option
 		$tile_layers = Waymark_Config::get_item('tiles', 'layers', true);
-
-		//Waymark_Helper::debug($tile_layers);
-		
+	
 		//Each layer
 		$basemap_options = array();
 		foreach($tile_layers as $layer) {
@@ -481,13 +491,9 @@ class Waymark_Settings {
 			}		
 		}
 		
-		//Waymark_Helper::debug($basemap_options);
-
 		// ==================== Misc ====================
 		
-		$role_options = array(
-			'public' => 'Anyone'
-		);
+		$role_options = array();
 		foreach(get_editable_roles() as $key => $role) {
 			$role_options[$key] = $role['name'];
 		}
@@ -512,10 +518,11 @@ class Waymark_Settings {
 							'name' => 'submission_roles',
 							'id' => 'submission_roles',
 							'type' => 'select_multi',
-							'title' => esc_html__('Submission Roles', 'waymark'),
+							'title' => esc_html__('Allow From', 'waymark'),
 							'default' => Waymark_Config::get_setting('submission', 'submission_options', 'submission_roles'),
 							'tip' => esc_attr__('Who can make submissions?', 'waymark'),
-							'options' => $role_options
+							'options' => $role_options,
+							'class' => ''
 						),
 						'editor_features' => array(
 							'name' => 'editor_features',
@@ -527,13 +534,26 @@ class Waymark_Settings {
 							'options' => array(
 								'draw' => 'Drawing',
 								'photo' => 'Photo Upload',
-								'file' => 'File Import'																																								
+								'file' => 'File Import',
+								'title' => 'Title',
+								'meta' => 'Meta'
 							)
 						)																													
 					)											
 				)
 			)
 		);
+		
+		//If public
+		if(Waymark_Config::get_setting('submission', 'submission_options', 'submission_public')) {
+			//Hide roles
+			$this->tabs['submission']
+									 ['sections']
+									 	['submission_options']
+									 		['fields']
+									 			['submission_roles']
+									 				['class'] .= ' waymark-hidden';
+		}
 		
 		// ==================== Misc ====================
 		
