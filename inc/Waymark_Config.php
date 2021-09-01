@@ -32,8 +32,10 @@ class Waymark_Config {
 			'submission' => array(
 				'submission_options' => array(
 					'submission_public' => '0',
-					'submission_roles' => 'administrator',
-					'editor_features' => 'draw,photo,file'
+					'submission_roles' => '',
+					'submission_features' => 'draw' . $multi_value_seperator . 'photo' . $multi_value_seperator . 'file' . $multi_value_seperator . 'title' . $multi_value_seperator . 'meta',
+					'submission_status' => 'publish',
+					'submission_alert' => '0'
 				)			
 			),
 			'misc' => array(
