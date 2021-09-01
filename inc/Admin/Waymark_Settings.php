@@ -482,6 +482,58 @@ class Waymark_Settings {
 		}
 		
 		//Waymark_Helper::debug($basemap_options);
+
+		// ==================== Misc ====================
+		
+		$role_options = array(
+			'public' => 'Anyone'
+		);
+		foreach(get_editable_roles() as $key => $role) {
+			$role_options[$key] = $role['name'];
+		}
+		
+		$this->tabs['submission'] = array(
+			'name' => esc_html__('Submission', 'waymark'),
+			'description' => '',
+			'sections' => array(
+				'submission_options' => array(
+					'title' => esc_html__('Front-End Submissions', 'waymark'),
+					'description' => esc_html__('Public submissions...', 'waymark'),
+					'fields' => array(
+						'submission_public' => array(
+							'name' => 'submission_public',
+							'id' => 'submission_public',
+							'type' => 'boolean',
+							'title' => esc_html__('Public Submissions', 'waymark'),
+							'default' => Waymark_Config::get_setting('submission', 'submission_options', 'submission_public'),
+							'tip' => esc_attr__('Whether to allow submissions.', 'waymark')
+						),
+						'submission_roles' => array(
+							'name' => 'submission_roles',
+							'id' => 'submission_roles',
+							'type' => 'select_multi',
+							'title' => esc_html__('Submission Roles', 'waymark'),
+							'default' => Waymark_Config::get_setting('submission', 'submission_options', 'submission_roles'),
+							'tip' => esc_attr__('Who can make submissions?', 'waymark'),
+							'options' => $role_options
+						),
+						'editor_features' => array(
+							'name' => 'editor_features',
+							'id' => 'editor_features',
+							'type' => 'select_multi',
+							'title' => esc_html__('Editor Features', 'waymark'),
+							'default' => Waymark_Config::get_setting('submission', 'submission_options', 'editor_features'),
+							'tip' => esc_attr__('What features to offer in the Editor.', 'waymark'),
+							'options' => array(
+								'draw' => 'Drawing',
+								'photo' => 'Photo Upload',
+								'file' => 'File Import'																																								
+							)
+						)																													
+					)											
+				)
+			)
+		);
 		
 		// ==================== Misc ====================
 		
@@ -731,23 +783,6 @@ class Waymark_Settings {
 					)											
 				),
 
-				//Submissions
-
-				'submission_options' => array(
-					'title' => esc_html__('Submission Options', 'waymark'),
-					'description' => esc_html__('Public submissions...', 'waymark'),
-					'fields' => array(
-						'allow_submission' => array(
-							'name' => 'allow_submission',
-							'id' => 'allow_submission',
-							'type' => 'boolean',
-							'title' => esc_html__('Allow Submissions?', 'waymark'),
-							'default' => Waymark_Config::get_setting('misc', 'submission_options', 'allow_submission'),
-							'tip' => esc_attr__('Whether to allow submissions.', 'waymark')
-						)																	
-					)											
-				),
-				
 				//Advanced
 
 				'advanced' => array(

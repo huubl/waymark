@@ -29,6 +29,13 @@ class Waymark_Config {
 					'meta_submission' => '0'					
 				)
 			),
+			'submission' => array(
+				'submission_options' => array(
+					'submission_public' => '0',
+					'submission_roles' => 'administrator',
+					'editor_features' => 'draw,photo,file'
+				)			
+			),
 			'misc' => array(
 				'map_options' => array(
 					'map_default_latlng' => '51.38436,-68.74923',
@@ -58,9 +65,6 @@ class Waymark_Config {
 					'elevation_units' => 'metric',
 					'elevation_colour' => '#b42714',
 					'elevation_initial' => '1'
-				),				
-				'submission_options' => array(
-					'allow_submission' => '0'
 				),
 				'advanced' => array(
 					'debug_mode' => '0'
