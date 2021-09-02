@@ -138,48 +138,40 @@ class Waymark_HTTP {
 						//Security
 						check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');											
 
-						//Determine status
-						$user = wp_get_current_user();
+	 					$Submission = new Waymark_Submission;
+	 					
+//	 					Waymark_Helper::debug($Submission);
 						
-						//Admin
-						if(sizeof($user->roles) && in_array('administrator', $user->roles)) {
-							//Always publish
-							$post_status = 'publish';
-						//Other user (guest or signed-in)
-						} else {
-							//Use setting
-							$post_status = Waymark_Config::get_setting('submission', 'submission_options', 'submission_status');
-						}
-						
-						$Map = new Waymark_Map;
-						$Map->set_data($_REQUEST);				
-						$post_id = $Map->create_post($_REQUEST['map_title'], array(
-							'post_status' => $post_status
-						));					
+						//Ensure submissions allowed
+						if($Submission->get_allowed() === true) {					
+							$Map = new Waymark_Map;
+							$Map->set_data($_REQUEST);				
+							$post_id = $Map->create_post($_REQUEST['map_title'], array(
+								'post_status' => $Submission->get_status()
+							));					
 
-						// === Status ===
-
-						//Publish
-						if($post_status == 'publish') {
-							//Take submitter there
-							wp_redirect(get_permalink($post_id));
-
-							die;
-						//Non-publish
-						} else {
-							//Redirect? (must be a valid URL)
-							if(array_key_exists('waymark_redirect', $_REQUEST) && filter_var($_REQUEST['waymark_redirect'], FILTER_VALIDATE_URL)) {
-								$redirect_url = $_REQUEST['waymark_redirect'];
-								$redirect_url .= (strpos($redirect_url, '?') === false) ? '?' : '&';
-								$redirect_url .= http_build_query(array(
-									'waymark_status' => $post_status
-								));
-								
-								//Waymark_Helper::debug($redirect_url);
-								
-								wp_redirect($redirect_url);
+							//Publish
+							if($Submission->get_status() == 'publish') {
+								//Take submitter there
+								wp_redirect(get_permalink($post_id));
 
 								die;
+							//Other status (draft)
+							} else {
+								//Redirect? (must be a valid URL)
+								if(array_key_exists('waymark_redirect', $_REQUEST) && filter_var($_REQUEST['waymark_redirect'], FILTER_VALIDATE_URL)) {
+									$redirect_url = $_REQUEST['waymark_redirect'];
+									$redirect_url .= (strpos($redirect_url, '?') === false) ? '?' : '&';
+									$redirect_url .= http_build_query(array(
+										'waymark_status' => $Submission->get_status()
+									));
+								
+									//Waymark_Helper::debug($redirect_url);
+								
+									wp_redirect($redirect_url);
+
+									die;
+								}
 							}
 						}
 						

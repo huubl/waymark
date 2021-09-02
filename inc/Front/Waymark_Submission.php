@@ -2,55 +2,103 @@
 	
 class Waymark_Submission {
 
-	function __construct() {	
-		//Let's ensure that the user can make submissions
-		//This is then stored in the constant WAYMARK_SUBMISSIONS_ALLOWED
+	private $allowed;
 	
-		//Get user
-		$user = wp_get_current_user();
+	private $user;
+	private $status;
+	private $alert;		
+	
+	function __construct() {	
+		//Default
+		$this->allowed = false;
+
+		//User
+		$this->user = wp_get_current_user();
 
 		//Signed-in user	
-		if(sizeof($user->roles)) {			
+		if(sizeof($this->user->roles)) {			
 			//Admin
-			if(in_array('administrator', $user->roles)) {
-				define('WAYMARK_SUBMISSIONS_ALLOWED', true);
-			//Signed-in user
-			} else {
-				//Match permissions
-				$role_intersect = array_intersect($user->roles, Waymark_Config::get_setting('submission', 'submission_options', 'submission_roles'));
+			if(in_array('administrator', $this->user->roles)) {
+				$this->allowed = true;
 				
-				//Allowed to submit
-				if(sizeof($role_intersect)) {
-					define('WAYMARK_SUBMISSIONS_ALLOWED', true);
-				//Not allowed to submit
-				} else {
-					define('WAYMARK_SUBMISSIONS_ALLOWED', false);
-				}
+				$this->status = 'publish';
+			//Current user can
+			} elseif($this->user_can_submit()) {
+				$this->allowed = true;
+
+				$this->status = Waymark_Config::get_setting('submission', 'from_users', 'submission_status');
+				$this->alert = Waymark_Config::get_setting('submission', 'from_users', 'submission_alert');
+			//Treat as public?
+			} elseif(Waymark_Config::get_setting('submission', 'from_public', 'submission_public')) {
+				$this->allowed = true;
+
+				$this->status = Waymark_Config::get_setting('submission', 'from_public', 'submission_status');				
+				$this->alert = Waymark_Config::get_setting('submission', 'from_public', 'submission_alert');
+			//Curent user can not
+			} else {
+				$this->allowed = false;		
 			}
-		//Not signed-in
+		//Guest
 		} else {
 			//Public submissions allowed	
-			if(Waymark_Config::get_setting('submission', 'submission_options', 'submission_public')) {
-				define('WAYMARK_SUBMISSIONS_ALLOWED', true);
+			if(Waymark_Config::get_setting('submission', 'from_public', 'submission_public')) {
+				$this->allowed = true;
+
+				$this->status = Waymark_Config::get_setting('submission', 'from_public', 'submission_status');				
+				$this->alert = Waymark_Config::get_setting('submission', 'from_public', 'submission_alert');				
 			//NO Public submissions!
 			} else {
-				define('WAYMARK_SUBMISSIONS_ALLOWED', false);
+				$this->allowed = false;
 			}		
-		}
+		}		
 		
 		//Load
-		if(WAYMARK_SUBMISSIONS_ALLOWED) {
+		if($this->allowed) {
 			Waymark_Helper::require('Admin/Waymark_AJAX.php');									
 		}
 	}
 	
-	function render_front($shortcode_data = array()) {
+	function get_allowed() {
+		return $this->allowed;
+	}
+
+	function get_status() {
+		return $this->status;
+	}
+
+	function get_alert() {
+		return $this->alert;
+	}
+
+
+	function user_can_submit() {
+		//Guest
+		if(! sizeof($this->user->roles)) {
+			return false;
+		}
+
+		//Admin
+		if(in_array('administrator', $this->user->roles)) {
+			return true;
+		}
+		
+		//Other user
+		$submission_roles = Waymark_Config::get_setting('submission', 'from_users', 'submission_roles');
+		//Current role can
+		if(is_array($submission_roles) && sizeof(array_intersect($this->user->roles, $submission_roles))) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	function render_front($data = array()) {
 		global $post;
 		
 		$content = '';
 			
 		//Submissions allowed
-		if(defined('WAYMARK_SUBMISSIONS_ALLOWED') && WAYMARK_SUBMISSIONS_ALLOWED == true) {
+		if($this->allowed) {
 			//Messages
 			if(array_key_exists('waymark_status', $_REQUEST)) {
 				switch($_REQUEST['waymark_status']) {

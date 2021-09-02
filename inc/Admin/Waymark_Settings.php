@@ -467,15 +467,15 @@ class Waymark_Settings {
 		);	
 
 		//If public
-		if(! in_array('meta', Waymark_Config::get_setting('submission', 'submission_options', 'submission_features'))) {
-			//Hide roles
-			$this->tabs['meta']
-									 ['sections']
-									 	['inputs']
-									 		['fields']
-									 			['meta_submission']
-									 				['class'] .= ' waymark-hidden';
-		}
+// 		if(! in_array('meta', Waymark_Config::get_setting('submission', 'submission_options', 'submission_features'))) {
+// 			//Hide roles
+// 			$this->tabs['meta']
+// 									 ['sections']
+// 									 	['inputs']
+// 									 		['fields']
+// 									 			['meta_submission']
+// 									 				['class'] .= ' waymark-hidden';
+// 		}
 
 
 		//Prepare Basemap values for editor option
@@ -501,36 +501,28 @@ class Waymark_Settings {
 		
 		$this->tabs['submission'] = array(
 			'name' => esc_html__('Submission', 'waymark'),
-			'description' => '',
+			'description' => '<h2>Front-End Submissions</h2>',
 			'sections' => array(
-				'submission_options' => array(
-					'title' => esc_html__('Front-End Submissions', 'waymark'),
-					'description' => esc_html__('Public submissions...', 'waymark'),
+				//By role
+				'from_users' => array(
+					'title' => esc_html__('User Submissions', 'waymark'),
+					'description' => esc_html__('From users...', 'waymark'),
 					'fields' => array(
-						'submission_public' => array(
-							'name' => 'submission_public',
-							'id' => 'submission_public',
-							'type' => 'boolean',
-							'title' => esc_html__('Public Submissions', 'waymark'),
-							'default' => Waymark_Config::get_setting('submission', 'submission_options', 'submission_public'),
-							'tip' => esc_attr__('Whether to allow submissions.', 'waymark')
-						),
 						'submission_roles' => array(
 							'name' => 'submission_roles',
 							'id' => 'submission_roles',
 							'type' => 'select_multi',
 							'title' => esc_html__('Allow From', 'waymark'),
-							'default' => Waymark_Config::get_setting('submission', 'submission_options', 'submission_roles'),
+							'default' => Waymark_Config::get_setting('submission', 'from_users', 'submission_roles'),
 							'tip' => esc_attr__('Who can make submissions?', 'waymark'),
-							'options' => $role_options,
-							'class' => ''
+							'options' => $role_options
 						),
 						'submission_features' => array(
 							'name' => 'submission_features',
 							'id' => 'submission_features',
 							'type' => 'select_multi',
 							'title' => esc_html__('Editor Features', 'waymark'),
-							'default' => Waymark_Config::get_setting('submission', 'submission_options', 'submission_features'),
+							'default' => Waymark_Config::get_setting('submission', 'from_users', 'submission_features'),
 							'tip' => esc_attr__('What features to offer in the Editor.', 'waymark'),
 							'options' => array(
 								'draw' => esc_attr__('Drawing', 'waymark'),
@@ -545,7 +537,7 @@ class Waymark_Settings {
 							'id' => 'submission_status',
 							'type' => 'select',
 							'title' => esc_html__('Post Status', 'waymark'),
-							'default' => Waymark_Config::get_setting('submission', 'submission_options', 'submission_status'),
+							'default' => Waymark_Config::get_setting('submission', 'from_users', 'submission_status'),
 							'tip' => esc_attr__('Initial status of post.', 'waymark'),
 							'options' => array(
 								'publish' => esc_attr__('Publish', 'waymark'),
@@ -557,23 +549,74 @@ class Waymark_Settings {
 							'id' => 'submission_alert',
 							'type' => 'boolean',
 							'title' => esc_html__('Email Alert', 'waymark'),
-							'default' => Waymark_Config::get_setting('submission', 'submission_options', 'submission_alert'),
+							'default' => Waymark_Config::get_setting('submission', 'from_users', 'submission_alert'),
 							'tip' => esc_attr__('Receive email alerts for new submissions.', 'waymark')
 						),																																								
 					)											
-				)
+				),
+				
+				//Public
+				'from_public' => array(
+					'title' => esc_html__('Public Submissions', 'waymark'),
+					'description' => esc_html__('From Public', 'waymark'),
+					'fields' => array(
+						'submission_public' => array(
+							'name' => 'submission_public',
+							'id' => 'submission_public',
+							'type' => 'boolean',
+							'title' => esc_html__('Public Submissions', 'waymark'),
+							'default' => Waymark_Config::get_setting('submission', 'from_public', 'submission_public'),
+							'tip' => esc_attr__('Whether to allow submissions.', 'waymark')
+						),
+						'submission_features' => array(
+							'name' => 'submission_features',
+							'id' => 'submission_features',
+							'type' => 'select_multi',
+							'title' => esc_html__('Editor Features', 'waymark'),
+							'default' => Waymark_Config::get_setting('submission', 'from_public', 'submission_features'),
+							'tip' => esc_attr__('What features to offer in the Editor.', 'waymark'),
+							'options' => array(
+								'draw' => esc_attr__('Drawing', 'waymark'),
+								'photo' => esc_attr__('Photo upload', 'waymark'),
+								'file' => esc_attr__('Read from File', 'waymark'),
+								'title' => esc_attr__('Title', 'waymark'),
+								'meta' => esc_attr__('Meta', 'waymark')
+							),
+							'class' => ''
+						),
+						'submission_status' => array(
+							'name' => 'submission_status',
+							'id' => 'submission_status',
+							'type' => 'select',
+							'title' => esc_html__('Post Status', 'waymark'),
+							'default' => Waymark_Config::get_setting('submission', 'from_public', 'submission_status'),
+							'tip' => esc_attr__('Initial status of post.', 'waymark'),
+							'options' => array(
+								'publish' => esc_attr__('Publish', 'waymark'),
+								'draft' => esc_attr__('Draft', 'waymark')
+							),
+							'class' => ''					
+						),
+						'submission_alert' => array(
+							'name' => 'submission_alert',
+							'id' => 'submission_alert',
+							'type' => 'boolean',
+							'title' => esc_html__('Email Alert', 'waymark'),
+							'default' => Waymark_Config::get_setting('submission', 'from_public', 'submission_alert'),
+							'tip' => esc_attr__('Receive email alerts for new submissions.', 'waymark'),
+							'class' => ''
+						),																																							
+					)											
+				)				
 			)
 		);
 		
-		//If public
-		if(Waymark_Config::get_setting('submission', 'submission_options', 'submission_public')) {
-			//Hide roles
-			$this->tabs['submission']
-									 ['sections']
-									 	['submission_options']
-									 		['fields']
-									 			['submission_roles']
-									 				['class'] .= ' waymark-hidden';
+		//If No public submissions
+		if(! Waymark_Config::get_setting('submission', 'from_public', 'submission_public')) {
+			//Hide settings
+			$this->tabs['submission']['sections']['from_public']['fields']['submission_features']['class'] .= ' waymark-hidden';
+			$this->tabs['submission']['sections']['from_public']['fields']['submission_status']['class'] .= ' waymark-hidden';
+			$this->tabs['submission']['sections']['from_public']['fields']['submission_alert']['class'] .= ' waymark-hidden';						
 		}
 		
 		// ==================== Misc ====================
