@@ -17,10 +17,7 @@ class Waymark_Front {
 		require_once('Front/Waymark_Shortcode.php');
 		require_once('Front/Waymark_Content.php');
 		require_once('Front/Waymark_HTTP.php');
-		if(Waymark_Config::get_setting('submission', 'submission_options', 'submission_public')) {
-			require_once('Admin/Waymark_AJAX.php');					
-			require_once('Front/Waymark_Submission.php');
-		}
+		require_once('Front/Waymark_Submission.php');
 	}
 
 	function wp_head() {

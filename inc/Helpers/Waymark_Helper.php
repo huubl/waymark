@@ -1,6 +1,12 @@
 <?php
 
 class Waymark_Helper {
+
+	static public function require($path = '') {
+		$path = plugin_dir_path(__DIR__) . $path;
+		
+		require_once($path);		
+	}
 	
 	static public function plugin_about() {
 		$out = '';
