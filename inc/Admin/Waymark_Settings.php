@@ -436,7 +436,7 @@ class Waymark_Settings {
 							'id' => 'meta_submission',
 							'type' => 'boolean',
 							'class' => '',	
-							'title' => '<span class="waymark-invisible">' . esc_html__('Meta', 'waymark') . '</span> ' . esc_html__('Public Submissions?', 'waymark'),									
+							'title' => '<span class="waymark-invisible">' . esc_html__('Meta', 'waymark') . '</span> ' . esc_html__('In Submissions?', 'waymark'),									
 							'default' => Waymark_Config::get_setting('meta', 'inputs', 'meta_submission'),
 							'tip' => esc_attr__('Public submissions allowed?', 'waymark'),
 						)
