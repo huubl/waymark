@@ -26,14 +26,18 @@ class Waymark_HTTP {
 		}
 
 		//Action
-// 		if(array_key_exists('waymark_message', $_REQUEST)) {	
-// 			Waymark_Helper::debug('Joetest!' . $_REQUEST['waymark_message']);
-// 		}
+		//!!! Submission
+		if(array_key_exists('waymark_message', $_REQUEST)) {	
+			Waymark_Helper::debug('Joetest!' . $_REQUEST['waymark_message'], false);
+		}
 
 		//Action
 		if(array_key_exists('waymark_action', $_REQUEST)) {	
 			//Requires Map Data
-			if(in_array($_REQUEST['waymark_action'], array('get_map_data', 'download_map_data'))) {
+			if(in_array($_REQUEST['waymark_action'], array(
+				'get_map_data',
+				'download_map_data'
+			))) {
 				//Do we have data?
 				if(array_key_exists('map_id', $_REQUEST) && is_numeric($_REQUEST['map_id'])) {					
 					//Valid Map
@@ -143,35 +147,16 @@ class Waymark_HTTP {
 						
 						//Ensure submissions allowed
 						if($Submission->get_allowed() === true) {					
-							//Success
-							if($post_id = $Submission->create_map()) {
-								//Publish
-								if($Submission->get_status() == 'publish') {
-									//Take submitter there
-									wp_redirect(get_permalink($post_id));
-
-									die;
-								//Other status (draft)
-								} else {
-									//Redirect? (must be a valid URL)
-									if(array_key_exists('waymark_redirect', $_REQUEST) && filter_var($_REQUEST['waymark_redirect'], FILTER_VALIDATE_URL)) {
-										$redirect_url = $_REQUEST['waymark_redirect'];
-										$redirect_url .= (strpos($redirect_url, '?') === false) ? '?' : '&';
-										$redirect_url .= http_build_query(array(
-											'waymark_status' => $Submission->get_status()
-										));
-								
-										//Waymark_Helper::debug($redirect_url);
-								
-										wp_redirect($redirect_url);
-
-										die;
-									}
-								}
-							//Create Map failure
-							} else {}
+							//Create Map
+							$Submission->create_map();
+							
+							$Submission->do_redirect();
+							
+//							Waymark_Helper::debug($Submission);
 						//Submission not allowed
-						} else {}
+						} else {
+							///!!! Submission
+						}
 						
 						break;
 				}				

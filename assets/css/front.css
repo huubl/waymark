@@ -152,6 +152,10 @@ div.waymark-accordion-container .waymark-accordion-group .waymark-parameter-grou
   color: green;
   border-color: green;
 }
+.waymark-message.waymark-error {
+  color: red;
+  border-color: red;
+}
 /**
  * ====================================
  * ============= THUMBNAIL ============

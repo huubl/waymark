@@ -9,9 +9,14 @@ class Waymark_Submission {
 	
 	private $user;
 	private $status;
-	private $alert;		
+	private $alert;	
+	
+	private $redirect_data;
+	private $redirect_url;	
 	
 	public function __construct($data = array()) {	
+		$this->data = $data;	
+	
 		//Default
 		$this->allowed = false;
 
@@ -55,12 +60,17 @@ class Waymark_Submission {
 				$this->allowed = false;
 			}		
 		}
-		
-		// ======= Other checks? ========
 
-		//!!!
-		$this->data = $data;	
+		// ======= Set redirect =======
 		
+		//Valid URL provided
+		if(array_key_exists('waymark_redirect', $this->data) && filter_var($this->data['waymark_redirect'], FILTER_VALIDATE_URL)) {
+			$this->redirect_url = $this->data['waymark_redirect'];
+		//Default to home
+		} else {
+			$this->redirect_url = get_option('home');		
+		}
+			
 		//Load
 		if($this->allowed) {
 			Waymark_Helper::require('Admin/Waymark_AJAX.php');									
@@ -114,13 +124,37 @@ class Waymark_Submission {
 		//Messages
 		if(array_key_exists('waymark_status', $_REQUEST)) {
 			switch($_REQUEST['waymark_status']) {
-				case 'draft' :
-					$content .= '<div class="waymark-message waymark-success">' . "\n";
-					$content .= __('Your submission has been received and is awaiting moderation.');
+				case 'error' :
+					$content .= '<div class="waymark-message waymark-error">' . "\n";
+
+					//Custom message?
+					if(isset($_REQUEST['waymark_message'])) {
+						$content .= $_REQUEST['waymark_message'];
+					} else {
+						$content .= __('There was an error with your submission.', 'waymark');					
+					}
+
 					$content .= '</div>' . "\n";					
 
-					return $content;		
-				
+					break;
+				case 'draft' :
+					$content .= '<div class="waymark-message waymark-success">' . "\n";
+					$content .= __('Your submission has been received and is awaiting moderation.', 'waymark');
+					$content .= '</div>' . "\n";					
+
+					break;
+				case 'publish' :
+					$content .= '<div class="waymark-message waymark-success">' . "\n";
+
+					//Custom message?
+					if(isset($_REQUEST['waymark_map_id'])) {
+						$content .= sprintf(__('Your submission has been <a href="%s">published</a>.', 'waymark'), get_permalink($_REQUEST['waymark_map_id']));
+					} else {
+						$content .= __('Your submission has been published.', 'waymark');
+					}
+
+					$content .= '</div>' . "\n";					
+
 					break;
 			}
 		}
@@ -185,12 +219,42 @@ class Waymark_Submission {
 			return false;
 		}
 
+		//Data checks
+		if(! array_key_exists('map_data', $this->data) || ! $this->data['map_data']) {
+			$this->status = 'error';
+			$this->redirect_data['waymark_message'] = __('Your Map was empty.', 'waymark');
+			
+			return false;		
+		}
+		
+		//If no Title provided
+		if(! array_key_exists('map_title', $this->data) || ! $this->data['map_title']) {
+			$this->data['map_title'] = esc_html__('Submission', 'waymark') . ' ' . substr(md5(rand(0,999999)), 0, 5);
+		}		
+
 		//Create Map
 		$this->Map = new Waymark_Map;
 		$this->Map->set_data($this->data);				
 		
-		return $this->Map->create_post($this->data['map_title'], array(
+		$this->Map->create_post($this->data['map_title'], array(
 			'post_status' => $this->status
 		));		
+
+		$this->redirect_data['waymark_map_id'] = $this->Map->post_id;
+		
+		return $this->Map->post_id;
+	}
+	
+	public function do_redirect() {
+		$this->redirect_data['waymark_status'] = $this->status;
+
+		if(sizeof($this->redirect_data)) {
+			//Append query string
+			$this->redirect_url .= (strpos($this->redirect_url, '?') === false) ? '?' : '&';
+
+			$this->redirect_url .= http_build_query($this->redirect_data);				
+		}
+	
+		wp_redirect($this->redirect_url);
 	}
 }
