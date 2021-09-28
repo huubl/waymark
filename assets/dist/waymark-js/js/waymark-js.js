@@ -8581,7 +8581,6 @@ function Waymark_Map_Editor() {
 				//Use Media Library (back-end only)?				
 				if(typeof wp.media != 'undefined' && Waymark.get_property(waymark_settings, 'misc', 'editor_options', 'media_library_uploads') == true) {
 					var button = Waymark_L.DomUtil.create('a', 'waymark-edit-button waymark-edit-upload', toolbar);
-					jQuery(button).append(input);
 					button.innerHTML = '<i class="ion ion-document"></i><i class="ion ion-arrow-up-c"></i>';								
 					button.setAttribute('title', waymark_js_lang.upload_file_title);
 					button.onclick = function() {
