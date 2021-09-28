@@ -112,6 +112,9 @@ class Waymark_Submission {
 	}
 
 	public function render_front($data = array()) {
+		//Load CSS/Scripts for rich text editor
+		wp_enqueue_editor();
+	
 		//Ensure Submissions allowed
 		if(! $this->allowed) {
 			return false;
