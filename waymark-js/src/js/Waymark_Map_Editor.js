@@ -148,9 +148,19 @@ function Waymark_Map_Editor() {
 	}
 
 	//Something was edited
- 	this.map_was_edited = function() {
- 	
- 	}
+ 	this.map_was_edited = function() {}
+
+	this.loading_start = function() {
+		Waymark = this;
+
+		Waymark.jq_map_container.addClass('waymark-loading');
+	},
+
+	this.loading_stop = function() {
+		Waymark = this;
+	
+		Waymark.jq_map_container.removeClass('waymark-loading');																	 							 
+	},
 		
 	this.create_buttons = function() {
 		Waymark = this;
@@ -396,6 +406,8 @@ function Waymark_Map_Editor() {
 	this.handle_file_upload = function(input, data = {}) {
 		Waymark = this;
 
+		Waymark.loading_start();
+
 		//Create form data
 		var form_data = new FormData();
 		form_data.append('waymark_security', waymark_ajax_security);			
@@ -458,8 +470,8 @@ function Waymark_Map_Editor() {
 
 						//!!! To-do - move this into Waymark.map_was_edited()	  	  
 
-						Waymark.save_data_layer();		 
-						 								 		
+						Waymark.save_data_layer();	
+						
 		  			break;
 
 		  		case 'marker_photo' :
@@ -485,15 +497,16 @@ function Waymark_Map_Editor() {
 
 						//!!! To-do - move this into Waymark.map_was_edited()	  	  
 
-						Waymark.save_data_layer();		 
-						 		
+						Waymark.save_data_layer();
+						
 		  			break;		  					  			
 		  	}
-		  	
-		  	
-		  	return;
 
-				Waymark.map_was_edited();								
+				Waymark.map_was_edited();	  	
+
+				Waymark.loading_stop();																 							 
+
+		  	return;
 			}
 		});												
 	},	 

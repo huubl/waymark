@@ -72,6 +72,7 @@ function Waymark_Map() {
 	this.init = function(user_config) {
 		Waymark = this;
 		Waymark.mode = 'view';
+		Waymark.jq_map_container = null;
 				
 		//Default config
 		Waymark.config = {
@@ -223,10 +224,10 @@ function Waymark_Map() {
 	this.setup_map = function() {
 		Waymark = this;
 	
-		var map_container = jQuery('#' + Waymark.config.map_div_id);
-		map_container.addClass('waymark-map-container');
-		map_container.css('height', Waymark.config.map_height + 'px');
-		Waymark.config.map_width = map_container.width();
+		Waymark.jq_map_container = jQuery('#' + Waymark.config.map_div_id);
+		Waymark.jq_map_container.addClass('waymark-map-container');
+		Waymark.jq_map_container.css('height', Waymark.config.map_height + 'px');
+		Waymark.config.map_width = Waymark.jq_map_container.width();
 		
 		//Create Map
 		Waymark.map = Waymark_L.map(Waymark.config.map_div_id, {
@@ -241,7 +242,7 @@ function Waymark_Map() {
 		Waymark_L.control.attribution({prefix: '<a href="https://wordpress.org/plugins/waymark" title="Share your way">Waymark</a> | <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>'}).addTo(Waymark.map);
 
 		//Add reference
-		map_container.data('Waymark', Waymark);
+		Waymark.jq_map_container.data('Waymark', Waymark);
 
 		//View
 		if(Waymark.config.map_init_latlng !== undefined) {
@@ -558,10 +559,8 @@ function Waymark_Map() {
 		Waymark = this;
 	
 		jQuery(window).on('resize', function() {
-			var map_container = jQuery(Waymark.map.getContainer());
-			
-			Waymark.config.map_height = map_container.height();
-			Waymark.config.map_width = map_container.width();
+			Waymark.config.map_height = Waymark.jq_map_container.height();
+			Waymark.config.map_width = Waymark.jq_map_container.width();
 
 			if(typeof Waymark.size_gallery === 'function') {
 				Waymark.size_gallery();		

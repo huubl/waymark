@@ -3,6 +3,12 @@
 	============= EDITOR =============
 	==================================
 */
+.waymark-map-container.waymark-is-editor.waymark-loading {
+  cursor: wait;
+}
+.waymark-map-container.waymark-is-editor.waymark-loading * {
+  cursor: wait;
+}
 .waymark-map-container.waymark-is-editor div.waymark-edit-toolbar * {
   box-sizing: unset;
 }
@@ -147,6 +153,9 @@
 .waymark-map-container.waymark-is-editor ul.waymark-info li textarea,
 .waymark-map-container.waymark-is-editor ul.waymark-info li input {
   border: 1px solid #d2d2d2;
+}
+.waymark-map-container.waymark-submission .leaflet-popup-content ul.waymark-info {
+  margin: 0 !important;
 }
 .waymark-map-container.waymark-submission .leaflet-popup-content ul.waymark-info .waymark-info-type select {
   padding: 5px;

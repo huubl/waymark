@@ -7,6 +7,13 @@
 */
 .waymark-map-container {
 	&.waymark-is-editor {
+		&.waymark-loading {
+			cursor: wait;
+			* {
+				cursor: wait;
+			}
+		}
+		
 		//Toolbar
 		div.waymark-edit-toolbar {
 			* {
@@ -170,7 +177,8 @@
 	&.waymark-submission {
 		//Popups
 		.leaflet-popup-content {	
-			ul.waymark-info {			
+			ul.waymark-info {		
+				margin: 0 !important;	
 				.waymark-info-type {
 					select {
 						padding: 5px;

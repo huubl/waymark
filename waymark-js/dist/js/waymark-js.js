@@ -6949,6 +6949,7 @@ function Waymark_Map() {
 	this.init = function(user_config) {
 		Waymark = this;
 		Waymark.mode = 'view';
+		Waymark.jq_map_container = null;
 				
 		//Default config
 		Waymark.config = {
@@ -7100,10 +7101,10 @@ function Waymark_Map() {
 	this.setup_map = function() {
 		Waymark = this;
 	
-		var map_container = jQuery('#' + Waymark.config.map_div_id);
-		map_container.addClass('waymark-map-container');
-		map_container.css('height', Waymark.config.map_height + 'px');
-		Waymark.config.map_width = map_container.width();
+		Waymark.jq_map_container = jQuery('#' + Waymark.config.map_div_id);
+		Waymark.jq_map_container.addClass('waymark-map-container');
+		Waymark.jq_map_container.css('height', Waymark.config.map_height + 'px');
+		Waymark.config.map_width = Waymark.jq_map_container.width();
 		
 		//Create Map
 		Waymark.map = Waymark_L.map(Waymark.config.map_div_id, {
@@ -7118,7 +7119,7 @@ function Waymark_Map() {
 		Waymark_L.control.attribution({prefix: '<a href="https://wordpress.org/plugins/waymark" title="Share your way">Waymark</a> | <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>'}).addTo(Waymark.map);
 
 		//Add reference
-		map_container.data('Waymark', Waymark);
+		Waymark.jq_map_container.data('Waymark', Waymark);
 
 		//View
 		if(Waymark.config.map_init_latlng !== undefined) {
@@ -7435,10 +7436,8 @@ function Waymark_Map() {
 		Waymark = this;
 	
 		jQuery(window).on('resize', function() {
-			var map_container = jQuery(Waymark.map.getContainer());
-			
-			Waymark.config.map_height = map_container.height();
-			Waymark.config.map_width = map_container.width();
+			Waymark.config.map_height = Waymark.jq_map_container.height();
+			Waymark.config.map_width = Waymark.jq_map_container.width();
 
 			if(typeof Waymark.size_gallery === 'function') {
 				Waymark.size_gallery();		
@@ -8410,9 +8409,19 @@ function Waymark_Map_Editor() {
 	}
 
 	//Something was edited
- 	this.map_was_edited = function() {
- 	
- 	}
+ 	this.map_was_edited = function() {}
+
+	this.loading_start = function() {
+		Waymark = this;
+
+		Waymark.jq_map_container.addClass('waymark-loading');
+	},
+
+	this.loading_stop = function() {
+		Waymark = this;
+	
+		Waymark.jq_map_container.removeClass('waymark-loading');																	 							 
+	},
 		
 	this.create_buttons = function() {
 		Waymark = this;
@@ -8658,6 +8667,8 @@ function Waymark_Map_Editor() {
 	this.handle_file_upload = function(input, data = {}) {
 		Waymark = this;
 
+		Waymark.loading_start();
+
 		//Create form data
 		var form_data = new FormData();
 		form_data.append('waymark_security', waymark_ajax_security);			
@@ -8720,8 +8731,8 @@ function Waymark_Map_Editor() {
 
 						//!!! To-do - move this into Waymark.map_was_edited()	  	  
 
-						Waymark.save_data_layer();		 
-						 								 		
+						Waymark.save_data_layer();	
+						
 		  			break;
 
 		  		case 'marker_photo' :
@@ -8747,15 +8758,16 @@ function Waymark_Map_Editor() {
 
 						//!!! To-do - move this into Waymark.map_was_edited()	  	  
 
-						Waymark.save_data_layer();		 
-						 		
+						Waymark.save_data_layer();
+						
 		  			break;		  					  			
 		  	}
-		  	
-		  	
-		  	return;
 
-				Waymark.map_was_edited();								
+				Waymark.map_was_edited();	  	
+
+				Waymark.loading_stop();																 							 
+
+		  	return;
 			}
 		});												
 	},	 
