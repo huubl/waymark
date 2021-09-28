@@ -177,12 +177,12 @@ class Waymark_Submission {
 		}
 
 		//Map Div
-		$content .= '<div id="waymark-map"></div>' . "\n";
+		$content .= '<div id="waymark-map" class="waymark-submission"></div>' . "\n";
 
 		//Output Config
 		Waymark_JS::add_chunk('var waymark_settings  = ' . json_encode(get_option('Waymark_Settings')));					
 		Waymark_JS::add_call('var waymark_user_config = ' . json_encode(Waymark_Config::get_map_config()) . ';');				
-		//Waymark_JS::add_call('waymark_user_config.map_height = 600;');				
+		Waymark_JS::add_call('waymark_user_config.map_height = 600;');				
 
 		//Set basemap
 		if($editor_basemap = Waymark_Config::get_setting('misc', 'editor_options', 'editor_basemap')) {
