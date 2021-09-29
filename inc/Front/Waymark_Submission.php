@@ -10,6 +10,7 @@ class Waymark_Submission {
 	private $user;
 	private $status;
 	private $alert;	
+	private $features;	
 	
 	private $redirect_data;
 	private $redirect_url;	
@@ -31,18 +32,25 @@ class Waymark_Submission {
 				$this->allowed = true;
 				
 				$this->status = 'publish';
+				
+				//Use the default for users (i.e. all of them)
+				$this->features = Waymark_Helper::convert_single_value_to_array(Waymark_Config::get_default('submission', 'from_users', 'submission_features'));
 			//Current user can
 			} elseif($this->user_can_submit()) {
 				$this->allowed = true;
 
 				$this->status = Waymark_Config::get_setting('submission', 'from_users', 'submission_status');
 				$this->alert = Waymark_Config::get_setting('submission', 'from_users', 'submission_alert');
+
+				$this->features = Waymark_Config::get_setting('submission', 'from_users', 'submission_features');				
 			//Treat as public?
 			} elseif(Waymark_Config::get_setting('submission', 'from_public', 'submission_public')) {
 				$this->allowed = true;
 
 				$this->status = Waymark_Config::get_setting('submission', 'from_public', 'submission_status');				
 				$this->alert = Waymark_Config::get_setting('submission', 'from_public', 'submission_alert');
+				
+				$this->features = Waymark_Config::get_setting('submission', 'from_public', 'submission_features');
 			//Curent user can not
 			} else {
 				$this->allowed = false;		
@@ -54,7 +62,9 @@ class Waymark_Submission {
 				$this->allowed = true;
 
 				$this->status = Waymark_Config::get_setting('submission', 'from_public', 'submission_status');				
-				$this->alert = Waymark_Config::get_setting('submission', 'from_public', 'submission_alert');				
+				$this->alert = Waymark_Config::get_setting('submission', 'from_public', 'submission_alert');		
+
+				$this->features = Waymark_Config::get_setting('submission', 'from_public', 'submission_features');					
 			//NO Public submissions!
 			} else {
 				$this->allowed = false;

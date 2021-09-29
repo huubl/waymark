@@ -143,8 +143,8 @@ class Waymark_Input {
 				//Is multi?
 				if(is_string($set_value) && strpos($set_value, ',')) {
 					$set_value = explode(',', $field['default']);
-				} elseif(is_string($set_value) && strpos($set_value, '__multi__')) {
-					$set_value = explode('__multi__', $field['default']);
+				} elseif(is_string($set_value) && strpos($set_value, Waymark_Config::get_item('multi_value_seperator'))) {
+					$set_value = explode(Waymark_Config::get_item('multi_value_seperator'), $field['default']);
 				}
 				
 				$out .= '		<select multiple="multiple" class="waymark-input" name="' . $field['name'] . '[]" id="' . $field['id'] . '">' . "\n";
