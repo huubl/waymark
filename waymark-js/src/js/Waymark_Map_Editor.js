@@ -216,7 +216,7 @@ function Waymark_Map_Editor() {
 						
 							jQuery.ajax({
 								type: "POST",
-								url: ajaxurl,
+								url: waymark_js.ajaxurl,
 								data: form_data,
 								dataType: 'json',
 								processData: false,
@@ -416,7 +416,7 @@ function Waymark_Map_Editor() {
 		
 		jQuery.ajax({
 		  type: "POST",
-		  url: ajaxurl,
+		  url: waymark_js.ajaxurl,
 		  data: form_data,
 			dataType: 'json',
 			processData: false,
