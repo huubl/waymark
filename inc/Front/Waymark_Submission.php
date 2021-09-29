@@ -99,6 +99,9 @@ class Waymark_Submission {
 		return $this->alert;
 	}
 
+	public function get_features() {
+		return $this->features;
+	}
 
 	private function user_can_submit() {
 		//Guest
