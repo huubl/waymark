@@ -30,7 +30,8 @@ class Waymark_Admin {
 	}
 	
 	function admin_init() {
-		require_once('Admin/Waymark_JS.php');			
+		require_once('Admin/Waymark_JS.php');
+		require_once('Front/Waymark_Submission.php');			
 		require_once('Admin/Waymark_AJAX.php');			
 		require_once('Admin/Waymark_Meta.php');	
 
