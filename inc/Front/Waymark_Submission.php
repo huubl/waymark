@@ -3,6 +3,7 @@
 class Waymark_Submission {
 
 	private $allowed;
+	private $all_features = ['draw', 'photo', 'file', 'title', 'meta'];
 	
 	private $data;
 	private $Map;
@@ -10,7 +11,7 @@ class Waymark_Submission {
 	private $user;
 	private $status;
 	private $alert;	
-	private $features;	
+	private $features = [];	
 	
 	private $redirect_data;
 	private $redirect_url;	
@@ -33,8 +34,8 @@ class Waymark_Submission {
 				
 				$this->status = 'publish';
 				
-				//Use the default for users (i.e. all of them)
-				$this->features = Waymark_Helper::convert_single_value_to_array(Waymark_Config::get_default('submission', 'from_users', 'submission_features'));
+				//Admin get all features
+				$this->features = $this->all_features;
 			//Current user can
 			} elseif($this->user_can_submit()) {
 				$this->allowed = true;
@@ -83,7 +84,7 @@ class Waymark_Submission {
 			
 		//Load
 		if($this->allowed) {
-			Waymark_Helper::require('Admin/Waymark_AJAX.php');									
+			Waymark_Helper::require('Admin/Waymark_AJAX.php');		
 		}
 	}
 	
@@ -204,6 +205,33 @@ class Waymark_Submission {
 
 		//Go!
 		Waymark_JS::add_call('Waymark_Map_Editor.init(waymark_user_config)');
+		
+		//Disable certain featureS?
+		$disable_features = array_diff($this->all_features, $this->features);
+		foreach($disable_features as $disable) {
+			switch($disable) {
+				case 'draw' :
+					Waymark_JS::add_call("
+						jQuery('.waymark-edit-line,.waymark-edit-rectangle,.waymark-edit-polygon,.waymark-edit-circle,.waymark-edit-marker', Waymark_Map_Editor.jq_map_container).each(function() {
+							jQuery(this).hide();
+						});
+					");								 
+
+					break;			
+				case 'photo' :
+					Waymark_JS::add_call("
+						jQuery('.waymark-edit-image', Waymark_Map_Editor.jq_map_container).hide();
+					");								 
+
+					break;
+				case 'file' :
+					Waymark_JS::add_call("
+						jQuery('.waymark-edit-upload', Waymark_Map_Editor.jq_map_container).hide();	
+					");								 
+
+					break;					
+			}
+		}
 
 		$content .= '<form action="' . Waymark_Helper::http_url() . '" method="post" id="waymark-map-add" class="waymark-map-add">' . "\n";
 		$content .= '	<input type="hidden" name="waymark_action" value="public_add_map" />' . "\n";
