@@ -74,9 +74,6 @@ class Waymark_AJAX {
 	function read_file() {
 		check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');
 
-		//Back-end or front-end request?
-		$ajax_context = (strpos(wp_get_referer(), get_admin_url()) !== false) ? 'back' : 'front';	
-		
 		$response_json = json_encode(array(
 			'error' => esc_html__('Unknown file upload error.', 'waymark')
 		));
@@ -88,26 +85,12 @@ class Waymark_AJAX {
 				//If no WP error
 				if(! $file_data['error']) {
 					$response_json = json_encode($file_data);
-				
+					
 					switch($file_key) {
 						//Read file contents
 						case 'add_file' :
-							//Front-end Submission
-							if($ajax_context == 'front') {
-								//Ensure user is allowed to do this
-								$Submission = new Waymark_Submission;
-								if(! in_array('file', $Submission->get_features())) {	
-									//Not allowed
-									$response_json = json_encode(array(
-										'error' => esc_html__('File Permission denied.', 'waymark')
-									));				
-									
-									break;
-								}
-							}						
-
 							$file_contents = Waymark_Input::get_file_contents($file_data);				
-						
+							
 							//Good data		
 							if(isset($file_contents['file_type']) && in_array($file_contents['file_type'], array('geojson', 'json', 'kml', 'gpx'))) {
 								$response_json = json_encode($file_contents);																	
@@ -118,42 +101,26 @@ class Waymark_AJAX {
 									'error' => $file_contents['error']
 								));								
 							}
-						
+							
 							break;
 						case 'marker_photo' :
 						case 'add_photo' :
-							//Front-end Submission
-							if($ajax_context == 'front') {
-									$response_json = json_encode(array(
-										'error' => esc_html__('joetest front.', 'waymark')
-									));				
-									
-									break;							
-							
-								//Ensure user is allowed to do this
-								$Submission = new Waymark_Submission;
-								if(! in_array('photo', $Submission->get_features())) {	
-									//Not allowed
-									$response_json = json_encode(array(
-										'error' => esc_html__('Photo Permission denied.', 'waymark')
-									));				
-									
-									break;
-								}
-							}						
-
-							//Upload
-							$attachment_id = media_handle_upload($file_key, 0);
+// 							if ( ! function_exists( 'wp_handle_upload' ) ) {
+// 									require_once( ABSPATH . 'wp-admin/includes/file.php' );
+// 							}
+ 
+ 							//Upload
+ 							$attachment_id = media_handle_upload($file_key, 0);
 
 							$attachment_url = wp_get_attachment_url($attachment_id);
 
 							$response = array(
 								'url' => $attachment_url								
 							);
-						
+							
 							//Meta?
 							$attachment_metadata = wp_get_attachment_metadata($attachment_id);
-						
+							
 							//Image Meta
 							if(array_key_exists('image_meta', $attachment_metadata) && is_array($attachment_metadata['image_meta'])) {
 								//Location EXIF
@@ -172,15 +139,15 @@ class Waymark_AJAX {
 									//Add URL
 									$size['url'] = wp_get_attachment_image_url($attachment_id, $size_key);
 								}
-						
+							
 								$response = array_merge($response, array(
 									'sizes' => $attachment_metadata['sizes']
 								));
 							}
-						
+							
 							$response_json = json_encode($response);
-
-							break;
+  
+ 							break;
 					}								
 				//WP error
 				} else {
@@ -192,7 +159,6 @@ class Waymark_AJAX {
 			}						
 		}
 
-			
 		header('Content-Type: text/javascript');
 		echo $response_json;
 		die;
