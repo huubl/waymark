@@ -239,12 +239,14 @@ class Waymark_Submission {
 		$content .= '	<input type="hidden" name="waymark_redirect" value="' . get_permalink($post) . '" />' . "\n";
 	
 		//Title
-		$content .= '	<div class="waymark-control-group waymark-control-type-text" id="map_date-container">' . "\n";
-		$content .= '		<label class="waymark-control-label" for="map_date">' . __('Title', 'waymark') . '</label>' . "\n";
-		$content .= '		<div class="waymark-controls">' . "\n";
-		$content .= '			<input class="waymark-input" type="text" name="map_title" id="map_title" value="">' . "\n";
-		$content .= '		</div>' . "\n";
-		$content .= '	</div>' . "\n";
+		if(in_array('title', $this->features)) {
+			$content .= '	<div class="waymark-control-group waymark-control-type-text" id="map_date-container">' . "\n";
+			$content .= '		<label class="waymark-control-label" for="map_date">' . __('Title', 'waymark') . '</label>' . "\n";
+			$content .= '		<div class="waymark-controls">' . "\n";
+			$content .= '			<input class="waymark-input" type="text" name="map_title" id="map_title" value="">' . "\n";
+			$content .= '		</div>' . "\n";
+			$content .= '	</div>' . "\n";		
+		}
 
 		//Create Form
 		$Map = new Waymark_Map;		
