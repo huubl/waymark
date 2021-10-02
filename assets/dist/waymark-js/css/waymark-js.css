@@ -693,6 +693,20 @@
 .waymark-map-container.waymark-is-editor ul.waymark-info li input {
   border: 1px solid #d2d2d2;
 }
+.waymark-map-container.waymark-is-editor.waymark-disable-draw .waymark-edit-line,
+.waymark-map-container.waymark-is-editor.waymark-disable-draw .waymark-edit-rectangle,
+.waymark-map-container.waymark-is-editor.waymark-disable-draw .waymark-edit-polygon,
+.waymark-map-container.waymark-is-editor.waymark-disable-draw .waymark-edit-circle,
+.waymark-map-container.waymark-is-editor.waymark-disable-draw .waymark-edit-marker {
+  display: none !important;
+}
+.waymark-map-container.waymark-is-editor.waymark-disable-photo .waymark-edit-image,
+.waymark-map-container.waymark-is-editor.waymark-disable-photo button#add_photo {
+  display: none !important;
+}
+.waymark-map-container.waymark-is-editor.waymark-disable-file .waymark-edit-upload {
+  display: none !important;
+}
 .waymark-map-container.waymark-submission .leaflet-popup-content ul.waymark-info {
   margin: 0 !important;
 }

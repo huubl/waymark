@@ -171,6 +171,27 @@
 				}
 			}
 		}
+
+		//Disable features
+		&.waymark-disable-draw {
+			.waymark-edit-line,
+			.waymark-edit-rectangle,
+			.waymark-edit-polygon,
+			.waymark-edit-circle,
+			.waymark-edit-marker {
+				display: none !important;					
+			}
+		}
+		&.waymark-disable-photo {
+			.waymark-edit-image, button#add_photo {
+				display: none !important;		
+			}
+		}
+		&.waymark-disable-file {
+			.waymark-edit-upload {
+				display: none !important;
+			}
+		}		
 	}
 	
 	//Submissions	

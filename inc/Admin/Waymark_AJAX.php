@@ -3,52 +3,16 @@
 class Waymark_AJAX {
 	
 	function __construct() {
-		//Front-end & Admin
-		add_action('wp_ajax_waymark_read_file', array($this, 'read_file'));				
-		add_action('wp_ajax_nopriv_waymark_read_file', array($this, 'read_file'));				
+		//Public
+		add_action('wp_ajax_nopriv_waymark_read_file', array($this, 'handle_read_file'));				
 
-		//Admin only
+		//User
+		add_action('wp_ajax_waymark_read_file', array($this, 'handle_read_file'));				
 		add_action('wp_ajax_waymark_get_attatchment_meta', array($this, 'get_attatchment_meta'));				
-		//add_action('wp_ajax_waymark_shortcode_form', array($this, 'shortcode_form'));				
 		
 		//Add nonce
 		Waymark_JS::add_chunk('var waymark_ajax_security = "' . wp_create_nonce(Waymark_Config::get_item('nonce_string')) . '";');					
 	}
-
-// 	function shortcode_form() {
-// 		check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');
-// 
-// 		$Map = new Waymark_Map;
-// 
-// 		echo '<div class="waymark-parameters-container waymark-self-clear">';
-// 		echo '	<div class="waymark-parameter-group waymark-self-clear" id="waymark-shortcode-form">' . "\n";
-// 		echo '		<div class="waymark-parameter-group-content">' . "\n";
-// 		echo '			<p class="waymark-parameter-group-description">The following options will be used to insert a unique [Waymark]<br /> shortcode.</p>' . "\n";
-// 		
-// 		$map_id = (isset($_POST['set_data']['map_id'])) ? $_POST['set_data']['map_id'] : null;
-// 		echo Waymark_Input::create_field($Map->relationship_field('one', 'Map', 'map_id', 'meta', 'Select which Map to display. Maps can be added or edited in Waymark &gt; Maps.'), $map_id);
-// 		
-// 		//Height
-// 		$map_height = (isset($_POST['set_data']['map_height'])) ? $_POST['set_data']['map_height'] : null;
-// 		echo Waymark_Input::create_field(array(
-// 			'input_types' => array('meta'),
-// 			'name' => 'map_height',
-// 			'id' => 'map_height',
-// 			'type' => 'text',				
-// 			'class' => 'waymark-short-input',
-// 			'tip' => 'Specify the desired height of the Map (in pixels). The Map will automatically adjust it’s width to fill the space available to it.',
-// 			'group' => 'meta',
-// 			'default' => Waymark_Config::get_setting('misc', 'map_options', 'map_height'),
-// 			'title' => 'Map Height'
-// 		), $map_height);
-// 		
-// 		echo '			<p style="font-size:10px"><br /><br /><b style="font-size:10px">Pro Tip!</b> You can update an existing shortcode by highlighting it fully in the editor before clicking<br />the Waymark icon.</p>' . "\n";
-// 		echo '		</div>' . "\n";
-// 		echo '	</div>' . "\n";
-// 		echo '</div>' . "\n";
-// 										
-// 		die;
-// 	}	
 
 	function get_attatchment_meta() {
 		check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');
@@ -69,6 +33,79 @@ class Waymark_AJAX {
 		header('Content-Type: text/javascript');
 		echo $response_json;
 		die;
+	}
+	
+	//Public Submissions
+	//Perform additional checks	to ensure user is allowed to do this
+	function handle_read_file() {
+		check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');
+
+		//Back-end
+		if(strpos(wp_get_referer(), get_admin_url()) !== false) {
+			//Let's read some files!
+			$this->read_file();		
+		//Front-end
+		} else {
+			//This is a submission
+			Waymark_Helper::require('Front/Waymark_Submission.php');
+			$Submission = new Waymark_Submission;
+
+			$response = array();
+
+			//If we have files
+			if(sizeof($_FILES)) {
+				//Each file
+				foreach($_FILES as $file_key => $file_data) {
+					//If no WP error
+					if(! $file_data['error']) {
+						switch($file_key) {
+							//Read from file
+							case 'add_file' :
+								//Ensure feature allowed
+								if(! in_array('file', $Submission->get_features())) {
+									//Not allowed
+									$response['error'] = esc_html__('Operation not allowed.', 'waymark');				
+								}				
+							
+								break;
+							//Photo upload
+							case 'marker_photo' :
+							case 'add_photo' :
+								//Ensure feature allowed
+								if(! in_array('photo', $Submission->get_features())) {
+									//Not allowed
+									$response['error'] = esc_html__('Operation not allowed.', 'waymark');				
+								}		
+													
+								break;
+						}
+					//WP Error
+					} else {
+						//Not allowed
+						$response['error'] = esc_html__('Operation not allowed.', 'waymark');					
+					}
+				}
+			//No files
+			} else {
+				//Not allowed
+				$response['error'] = $file_data['error'];						
+			}
+
+			//Error?
+			if(isset($response['error'])) {
+				//Do not continue
+				header('Content-Type: text/javascript');
+				echo json_encode(array(
+					'error' => $response['error']
+				));	
+
+				die;	
+			//Good to continue
+			} else {
+				//Let's read some files!
+				$this->read_file();
+			}		
+		}
 	}
 	
 	function read_file() {

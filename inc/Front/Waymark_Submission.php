@@ -209,28 +209,9 @@ class Waymark_Submission {
 		//Disable certain featureS?
 		$disable_features = array_diff($this->all_features, $this->features);
 		foreach($disable_features as $disable) {
-			switch($disable) {
-				case 'draw' :
-					Waymark_JS::add_call("
-						jQuery('.waymark-edit-line,.waymark-edit-rectangle,.waymark-edit-polygon,.waymark-edit-circle,.waymark-edit-marker', Waymark_Map_Editor.jq_map_container).each(function() {
-							jQuery(this).hide();
-						});
-					");								 
-
-					break;			
-				case 'photo' :
-					Waymark_JS::add_call("
-						jQuery('.waymark-edit-image', Waymark_Map_Editor.jq_map_container).hide();
-					");								 
-
-					break;
-				case 'file' :
-					Waymark_JS::add_call("
-						jQuery('.waymark-edit-upload', Waymark_Map_Editor.jq_map_container).hide();	
-					");								 
-
-					break;					
-			}
+			Waymark_JS::add_call("
+				Waymark_Map_Editor.jq_map_container.addClass('waymark-disable-$disable');
+			");
 		}
 
 		$content .= '<form action="' . Waymark_Helper::http_url() . '" method="post" id="waymark-map-add" class="waymark-map-add">' . "\n";
