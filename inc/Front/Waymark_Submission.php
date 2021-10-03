@@ -22,64 +22,68 @@ class Waymark_Submission {
 		//Default
 		$this->allowed = false;
 
-		// ======= Check User ========
+		//Enabled?
+		if(Waymark_Config::get_setting('submission', 'global', 'submission_enable')) {
+			// ======= Check User ========
 		
-		$this->user = wp_get_current_user();
+			$this->user = wp_get_current_user();
 
-		//Signed-in user	
-		if(sizeof($this->user->roles)) {			
-			//Admin
-			if(in_array('administrator', $this->user->roles)) {
-				$this->allowed = true;
+			//Signed-in user	
+			if(sizeof($this->user->roles)) {			
+				//Admin
+				if(in_array('administrator', $this->user->roles)) {
+					$this->allowed = true;
 				
-				$this->status = 'publish';
+					$this->status = 'publish';
 				
-				//Admin get all features
-				$this->features = $this->all_features;
-			//Current user can
-			} elseif($this->user_can_submit()) {
-				$this->allowed = true;
+					//Admin get all features
+					$this->features = $this->all_features;
+				//Current user can
+				} elseif($this->user_can_submit()) {
+					$this->allowed = true;
 
-				$this->status = Waymark_Config::get_setting('submission', 'from_users', 'submission_status');
-				$this->alert = Waymark_Config::get_setting('submission', 'from_users', 'submission_alert');
+					$this->status = Waymark_Config::get_setting('submission', 'from_users', 'submission_status');
+					$this->alert = Waymark_Config::get_setting('submission', 'from_users', 'submission_alert');
 
-				$this->features = Waymark_Config::get_setting('submission', 'from_users', 'submission_features');				
-			//Treat as public?
-			} elseif(Waymark_Config::get_setting('submission', 'from_public', 'submission_public')) {
-				$this->allowed = true;
+					$this->features = Waymark_Config::get_setting('submission', 'from_users', 'submission_features');				
+				//Treat as public?
+				} elseif(Waymark_Config::get_setting('submission', 'from_public', 'submission_public')) {
+					$this->allowed = true;
 
-				$this->status = Waymark_Config::get_setting('submission', 'from_public', 'submission_status');				
-				$this->alert = Waymark_Config::get_setting('submission', 'from_public', 'submission_alert');
+					$this->status = Waymark_Config::get_setting('submission', 'from_public', 'submission_status');				
+					$this->alert = Waymark_Config::get_setting('submission', 'from_public', 'submission_alert');
 				
-				$this->features = Waymark_Config::get_setting('submission', 'from_public', 'submission_features');
-			//Curent user can not
+					$this->features = Waymark_Config::get_setting('submission', 'from_public', 'submission_features');
+				//Curent user can not
+				} else {
+					$this->allowed = false;		
+				}
+			//Guest
 			} else {
-				$this->allowed = false;		
+				//Public submissions allowed	
+				if(Waymark_Config::get_setting('submission', 'from_public', 'submission_public')) {
+					$this->allowed = true;
+
+					$this->status = Waymark_Config::get_setting('submission', 'from_public', 'submission_status');				
+					$this->alert = Waymark_Config::get_setting('submission', 'from_public', 'submission_alert');		
+
+					$this->features = Waymark_Config::get_setting('submission', 'from_public', 'submission_features');					
+				//NO Public submissions!
+				} else {
+					$this->allowed = false;
+				}		
 			}
-		//Guest
-		} else {
-			//Public submissions allowed	
-			if(Waymark_Config::get_setting('submission', 'from_public', 'submission_public')) {
-				$this->allowed = true;
 
-				$this->status = Waymark_Config::get_setting('submission', 'from_public', 'submission_status');				
-				$this->alert = Waymark_Config::get_setting('submission', 'from_public', 'submission_alert');		
-
-				$this->features = Waymark_Config::get_setting('submission', 'from_public', 'submission_features');					
-			//NO Public submissions!
-			} else {
-				$this->allowed = false;
-			}		
-		}
-
-		// ======= Set redirect =======
+			// ======= Set redirect =======
 		
-		//Valid URL provided
-		if(array_key_exists('waymark_redirect', $this->data) && filter_var($this->data['waymark_redirect'], FILTER_VALIDATE_URL)) {
-			$this->redirect_url = $this->data['waymark_redirect'];
-		//Default to home
-		} else {
-			$this->redirect_url = get_option('home');		
+			//Valid URL provided
+			if(array_key_exists('waymark_redirect', $this->data) && filter_var($this->data['waymark_redirect'], FILTER_VALIDATE_URL)) {
+				$this->redirect_url = $this->data['waymark_redirect'];
+			//Default to home
+			} else {
+				$this->redirect_url = get_option('home');		
+			}
+		
 		}
 			
 		//Load

@@ -30,6 +30,9 @@ class Waymark_Config {
 				)
 			),
 			'submission' => array(
+				'global' => array(
+					'submission_enable' => '0'
+				),
 				'from_users' => array(
 					'submission_roles' => '',
 					'submission_features' => 'draw' . $multi_value_seperator . 'photo' . $multi_value_seperator . 'file' . $multi_value_seperator . 'title' . $multi_value_seperator . 'meta',

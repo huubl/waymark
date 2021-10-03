@@ -466,17 +466,13 @@ class Waymark_Settings {
 			)			
 		);	
 
-		//If public
+		//Submissions not enabled
+		if(! Waymark_Config::get_setting('submission', 'global', 'submission_enable')) {
+			//Hide settings_fields
+			$this->tabs['meta']['sections']['inputs']['fields']['meta_submission']['class'] = ' waymark-hidden';
+		}
+		
 // 		if(! in_array('meta', Waymark_Config::get_setting('submission', 'submission_options', 'submission_features'))) {
-// 			//Hide roles
-// 			$this->tabs['meta']
-// 									 ['sections']
-// 									 	['inputs']
-// 									 		['fields']
-// 									 			['meta_submission']
-// 									 				['class'] .= ' waymark-hidden';
-// 		}
-
 
 		//Prepare Basemap values for editor option
 		$tile_layers = Waymark_Config::get_item('tiles', 'layers', true);
@@ -502,9 +498,24 @@ class Waymark_Settings {
 		$this->tabs['submission'] = array(
 			'name' => esc_html__('Submissions', 'waymark'),
 			'description' => '
-				<h2>Front-End Submissions</h2>
-				<p>Site administrators can submit Maps from the front-end using this Shortcode:<br /><span class="waymark-code">[Waymark content="submission"]</span></small>',
+				<h2>Submissions</h2>
+				<!--<p>Site administrators can submit Maps from the front-end using this Shortcode:<br /><span class="waymark-code">[Waymark content="submission"]</span></small>-->',
 			'sections' => array(
+				//Global
+				'global' => array(
+//					'title' => esc_html__('Front-End', 'waymark'),
+//					'description' => esc_html__('Registered users can also submit Maps from the front-end.', 'waymark'),
+					'fields' => array(
+						'submission_enable' => array(
+							'name' => 'submission_enable',
+							'id' => 'submissubmission_enablesion_alert',
+							'type' => 'boolean',
+							'title' => esc_html__('Allow Submissions', 'waymark'),
+							'default' => Waymark_Config::get_setting('submission', 'global', 'submission_enable'),
+							'tip' => esc_attr__('Enable Submissions on the front-end?', 'waymark')
+						),					
+					)
+				),
 				//By role
 				'from_users' => array(
 					'title' => esc_html__('User Submissions', 'waymark'),
@@ -606,15 +617,19 @@ class Waymark_Settings {
 							'title' => esc_html__('Email Alert', 'waymark'),
 							'default' => Waymark_Config::get_setting('submission', 'from_public', 'submission_alert'),
 							'tip' => esc_attr__('Receive email alerts for new submissions.', 'waymark'),
-							'class' => ''
+							'class' => 'waymark-disable'
 						),																																							
 					)											
 				)				
 			)
 		);
-		
+
+		//Submissions not enabled
+		if(! Waymark_Config::get_setting('submission', 'global', 'submission_enable')) {
+			$this->tabs['submission']['sections']['from_users']['class'] = 'waymark-hidden';		
+			$this->tabs['submission']['sections']['from_public']['class'] = 'waymark-hidden';		
 		//If No public submissions
-		if(! Waymark_Config::get_setting('submission', 'from_public', 'submission_public')) {
+		}elseif(! Waymark_Config::get_setting('submission', 'from_public', 'submission_public')) {
 			//Hide settings
 			$this->tabs['submission']['sections']['from_public']['fields']['submission_features']['class'] .= ' waymark-hidden';
 			$this->tabs['submission']['sections']['from_public']['fields']['submission_status']['class'] .= ' waymark-hidden';
@@ -920,7 +935,10 @@ class Waymark_Settings {
 		//For each tab		
 		foreach($this->tabs as $tab_key => $tab_data) {		
 			//For each section
-			foreach($tab_data['sections'] as $section_key => $section_data) {				
+			foreach($tab_data['sections'] as $section_key => $section_data) {		
+				//Set if blank if unset		
+				$section_data['title'] = (isset($section_data['title'])) ? $section_data['title'] : '';
+				
 				//Create section
 				add_settings_section($section_key, $section_data['title'], array($this, 'section_text'), $this->page_slug);		
 				
@@ -1041,7 +1059,8 @@ class Waymark_Settings {
 
 			//For each section
 			foreach($tab_data['sections'] as $section_key => $section_data) {
-				echo '		<div class="waymark-settings-section-' . $section_key. '">' . "\n";
+				$class = (isset($section_data['class'])) ? ' ' . $section_data['class'] : '';
+				echo '		<div class="waymark-settings-section-' . $section_key . $class . '">' . "\n";
 				
 				//Help
 				if(array_key_exists('help', $section_data) && isset($section_data['help']['url'])) {
@@ -1051,7 +1070,9 @@ class Waymark_Settings {
 				}
 				
 				//Title
-				echo '		<h2>' . $section_data['title'] . '</h2>' . "\n";
+				if(isset($section_data['title'])) {
+					echo '		<h2>' . $section_data['title'] . '</h2>' . "\n";
+				}
 
 				//Description
 				if(array_key_exists('description', $section_data)) {
