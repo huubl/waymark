@@ -500,13 +500,15 @@ class Waymark_Settings {
 		unset($role_options['administrator']);
 		
 		$this->tabs['submission'] = array(
-			'name' => esc_html__('Submission', 'waymark'),
-			'description' => '<h2>Front-End Submissions</h2>',
+			'name' => esc_html__('Submissions', 'waymark'),
+			'description' => '
+				<h2>Front-End Submissions</h2>
+				<p>Site administrators can submit Maps from the front-end using this Shortcode:<br /><span class="waymark-code">[Waymark content="submission"]</span></small>',
 			'sections' => array(
 				//By role
 				'from_users' => array(
 					'title' => esc_html__('User Submissions', 'waymark'),
-					'description' => esc_html__('From users...', 'waymark'),
+					'description' => esc_html__('Registered users can also submit Maps from the front-end.', 'waymark'),
 					'fields' => array(
 						'submission_roles' => array(
 							'name' => 'submission_roles',
@@ -558,7 +560,7 @@ class Waymark_Settings {
 				//Public
 				'from_public' => array(
 					'title' => esc_html__('Public Submissions', 'waymark'),
-					'description' => esc_html__('From Public', 'waymark'),
+					'description' => esc_html__('This will allow Submissions from any visitor, without registration.', 'waymark'),
 					'fields' => array(
 						'submission_public' => array(
 							'name' => 'submission_public',
@@ -592,7 +594,7 @@ class Waymark_Settings {
 							'default' => Waymark_Config::get_setting('submission', 'from_public', 'submission_status'),
 							'tip' => esc_attr__('Initial status of post.', 'waymark'),
 							'options' => array(
-								'publish' => esc_attr__('Publish', 'waymark'),
+								'publish' => esc_attr__('Publish (not recommended!)', 'waymark'),
 								'draft' => esc_attr__('Draft', 'waymark')
 							),
 							'class' => ''					

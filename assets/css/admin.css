@@ -8,6 +8,15 @@
   display: table;
   clear: both;
 }
+.waymark-code {
+  display: inline-block;
+  margin: 0 3px;
+  padding: 3px;
+  font-size: 90%;
+  color: #999;
+  border: 1px solid #ddd;
+  background: #f7f7f7;
+}
 /**
  * ====================================
  * ============= TOOLTIPS =============
@@ -347,6 +356,7 @@ div.widget-content div.waymark-parameters-container div.waymark-controls input[t
  * ====================================
  */
 body.waymark_page_waymark-settings h2.nav-tab-wrapper a {
+  font-size: 13px !important;
   margin-left: 4px;
 }
 body.waymark_page_waymark-settings h2.nav-tab-wrapper a.nav-tab-active {
