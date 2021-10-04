@@ -174,11 +174,35 @@ function Waymark_Map() {
 	this.debug = function(thing) {
 		if(this.get_property(waymark_settings, 'misc', 'advanced', 'debug_mode') == true) {
 			if(typeof thing == 'string') {
-				console.log(waymark_js_lang.info_message_prefix + ': ' + thing);			
+				console.log('[' + waymark_js_lang.info_message_prefix + '] ' + thing);			
 			} else {
-				console.log(waymark_js_lang.info_message_prefix + ': ');			
+				console.log('[' + waymark_js_lang.info_message_prefix + '] ...');			
 				console.log(thing);
 			}
+		}
+	}
+
+	this.message = function(text = null, type = 'info') {
+		if(text) {
+			var prefix = '';
+			
+			switch(type) {
+				case 'error' :
+					prefix = waymark_js_lang.error_message_prefix;
+					
+					break;
+				default:
+				case 'info' :
+					prefix = waymark_js_lang.info_message_prefix;
+
+					break;			
+			}
+			
+			if(prefix) {
+				prefix = '[' + prefix + '] ';
+			}
+			
+			alert(prefix + text);			
 		}
 	}
 
@@ -280,8 +304,6 @@ function Waymark_Map() {
 				'enableHighAccuracy': true		
 			}// ,
 // 			'getLocationBounds': function(locationEvent) {
-// 				console.log(locationEvent);
-// 			
 // 				return locationEvent.bounds;
 // 			}                
 		}).addTo(Waymark.map);

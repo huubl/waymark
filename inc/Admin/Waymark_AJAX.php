@@ -56,7 +56,7 @@ class Waymark_AJAX {
 	function public_handle_read_file() {
 		check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');
 
-		//Change upload location
+		//Change upload location? (empty string means use default Media Library directory)
 		if(Waymark_Config::get_setting('submission', 'from_public', 'submission_upload_dir')) {
 			add_filter('upload_dir', array($this, 'public_upload_dir'));		
 		}
