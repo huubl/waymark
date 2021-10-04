@@ -258,24 +258,16 @@ class Waymark_Admin {
 	}	
 
 	function upload_mimes($existing_mimes) {
-		$existing_mimes['gpx'] = 'application/gpx+xml';
-		$existing_mimes['kml'] = 'application/vnd.google-earth.kml+xml';
-		$existing_mimes['json'] = 'application/geo+json';
-		$existing_mimes['geojson'] = 'application/geo+json';
+		foreach(Waymark_Config::get_item('mimes', 'file') as $ext => $mime) {
+ 			$existing_mimes[$ext] = $mime;
+		}
 
 		return $existing_mimes;
 	}		
 
 	function wp_check_filetype_and_ext( $check, $file, $filename, $mimes ) {
 		//Check file type
-		$mimes = array(
-			'gpx' => 'application/gpx+xml',
-			'kml' => 'application/vnd.google-earth.kml+xml',
-			'kmz' => 'application/vnd.google-earth.kmz',
-			'json' => 'application/geo+json',
-			'geojson' => 'application/geo+json'
-		);
-		$filetype = wp_check_filetype($filename, $mimes);
+		$filetype = wp_check_filetype($filename, Waymark_Config::get_item('mimes', 'file'));
 
 		//File type we are interested in
 		if(array_key_exists('type', $filetype) && $filetype['type']) {

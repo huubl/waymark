@@ -17,6 +17,15 @@ class Waymark_Config {
 			'directory_url' => 'https://wordpress.org/support/plugin/waymark/',
 			'multi_value_seperator' => $multi_value_seperator,
 			'shortcode' => 'Waymark',
+			'mimes' => array(
+				'file' => array(
+					'gpx' => 'application/gpx+xml',
+					'kml' => 'application/vnd.google-earth.kml+xml',
+					'kmz' => 'application/vnd.google-earth.kmz',
+					'json' => 'application/geo+json',
+					'geojson' => 'application/geo+json'
+				)
+			),
 			'meta' => array(
 				'inputs' => array(
 					'meta_title' => esc_html__('Description', 'waymark'),

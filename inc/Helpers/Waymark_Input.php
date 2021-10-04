@@ -404,20 +404,22 @@ class Waymark_Input {
 // 	}
 
 	static function get_file_contents($file) {
+		$allowed_mimes = Waymark_Config::get_item('mimes', 'file');
+
 		//Get the file type of the upload
-		$mimes = array(
-			'gpx' => 'application/gpx+xml',
-			'kml' => 'application/vnd.google-earth.kml+xml',
-			'kmz' => 'application/vnd.google-earth.kmz',
-			'json' => 'application/geo+json',
-			'geojson' => 'application/geo+json'
-		);
-		$filetype = wp_check_filetype(basename($file['name']), $mimes);
+		$filetype = wp_check_filetype(basename($file['name']), $allowed_mimes);
+
+		//MIME Type
+		$type_valid = array_key_exists('type', $filetype) && in_array($filetype['type'], $allowed_mimes);
+		
+		//File extension
+		$ext_valid = array_key_exists('ext', $filetype) && array_key_exists($filetype['ext'], $allowed_mimes);		
 				 
 		//File type is supported
-		if(array_key_exists('type', $filetype) && $filetype['type']) {
+		if($type_valid && $ext_valid) {
 	    return array(
 				'file_type' => $filetype['ext'],
+				'file_mime' => $filetype['type'],
 				'file_contents' => file_get_contents($file['tmp_name']),
 				'file_info' => $file	
 			);
