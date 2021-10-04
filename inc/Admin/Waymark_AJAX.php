@@ -4,7 +4,7 @@ class Waymark_AJAX {
 	
 	function __construct() {
 		//Public
-		add_action('wp_ajax_nopriv_waymark_read_file', array($this, 'handle_read_file'));				
+		add_action('wp_ajax_nopriv_waymark_read_file', array($this, 'public_handle_read_file'));				
 
 		//User
 		add_action('wp_ajax_waymark_read_file', array($this, 'handle_read_file'));				
@@ -35,7 +35,35 @@ class Waymark_AJAX {
 		die;
 	}
 	
-	//Public Submissions
+	//Thanks! https://wordpress.stackexchange.com/a/290275 & https://stackoverflow.com/a/45507980
+	function public_upload_dir($dir_data) {
+    $custom_dir = 'waymark_submission';
+
+		//Custom directory (create or already exists)
+		if(wp_mkdir_p($dir_data['basedir'] . '/' . $custom_dir)) {
+			foreach($dir_data as $data_key => &$data_value) {
+				if(! in_array($data_key, ['error'])) {
+					//Replace with our custom sub-directory
+					$data_value = str_replace(trim($dir_data['subdir'], '/'), $custom_dir, $data_value);
+				}
+			}
+		}
+		
+		return $dir_data;
+	}
+	
+	//Public Submission
+	function public_handle_read_file() {
+		check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');
+
+		//Change upload location
+		if(Waymark_Config::get_setting('submission', 'from_public', 'submission_upload_dir')) {
+			add_filter('upload_dir', array($this, 'public_upload_dir'));		
+		}
+
+		$this->handle_read_file();
+	}
+	
 	//Perform additional checks	to ensure user is allowed to do this
 	function handle_read_file() {
 		check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');
@@ -109,8 +137,6 @@ class Waymark_AJAX {
 	}
 	
 	function read_file() {
-		check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');
-
 		$response_json = json_encode(array(
 			'error' => esc_html__('Unknown file upload error.', 'waymark')
 		));
@@ -148,7 +174,8 @@ class Waymark_AJAX {
  
  							//Upload
  							$attachment_id = media_handle_upload($file_key, 0);
-
+							
+							//Get URL
 							$attachment_url = wp_get_attachment_url($attachment_id);
 
 							$response = array(

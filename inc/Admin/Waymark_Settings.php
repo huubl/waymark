@@ -489,11 +489,16 @@ class Waymark_Settings {
 		
 		// ==================== Submission ====================
 		
+		//Roles
 		$role_options = array();
 		foreach(get_editable_roles() as $key => $role) {
 			$role_options[$key] = $role['name'];
 		}
 		unset($role_options['administrator']);
+
+		//Public upload dir
+		$upload_dir = wp_upload_dir();
+		$upload_dir['subdir'] = ($upload_dir['subdir']) ? $upload_dir['subdir'] : '/';
 		
 		$this->tabs['submission'] = array(
 			'name' => esc_html__('Submissions', 'waymark'),
@@ -596,6 +601,19 @@ class Waymark_Settings {
 								'meta' => esc_attr__('Meta', 'waymark')
 							),
 							'class' => ''
+						),
+						'submission_upload_dir' => array(
+							'name' => 'submission_upload_dir',
+							'id' => 'submission_upload_dir',
+							'type' => 'select',
+							'title' => esc_html__('Upload Location', 'waymark'),
+							'default' => Waymark_Config::get_setting('submission', 'from_public', 'submission_upload_dir'),
+							'tip' => esc_attr__('Photo upload location', 'waymark'),
+							'class' => '',
+							'options' => array(
+								'waymark_submission' => esc_attr__('Sandboxed (/waymark_submission)', 'waymark'),
+								'' => sprintf(esc_attr__('Media Library Default (%s)', 'waymark'), $upload_dir['subdir']),
+							)			
 						),
 						'submission_status' => array(
 							'name' => 'submission_status',

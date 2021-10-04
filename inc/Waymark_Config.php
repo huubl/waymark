@@ -42,6 +42,7 @@ class Waymark_Config {
 				'from_public' => array(
 					'submission_public' => '0',
 					'submission_features' => 'draw' . $multi_value_seperator . 'photo' . $multi_value_seperator . 'file' . $multi_value_seperator . 'title',
+					'submission_upload_dir' => 'waymark_submission',
 					'submission_status' => 'draft',
 					'submission_alert' => '1'
 				)			
