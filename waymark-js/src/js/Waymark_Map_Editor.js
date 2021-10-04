@@ -428,10 +428,14 @@ function Waymark_Map_Editor() {
 		  		case 'add_file' :
 						if(response === null) {
 							console.log(waymark_js_lang.error_message_prefix + ': ' + waymark_js_lang.error_file_upload);					  
+			
+							Waymark.loading_stop();																 							 
 					
 							return;
 						} else if(response.error) {
 							console.log(waymark_js_lang.error_message_prefix + ': ' + response.error);			
+			
+							Waymark.loading_stop();																 							 
 					
 							return;		  			  
 						}
