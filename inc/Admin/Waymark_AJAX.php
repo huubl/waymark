@@ -153,7 +153,7 @@ class Waymark_AJAX {
 							$file_contents = Waymark_Input::get_file_contents($file_data);				
 							
 							//Good data		
-							if(isset($file_contents['file_type']) && in_array($file_contents['file_type'], array('geojson', 'json', 'kml', 'gpx'))) {
+							if(isset($file_contents['file_type'])) {
 								$response_json = json_encode($file_contents);																	
 							//Error?
 							} elseif(isset($file_contents['error'])) {
