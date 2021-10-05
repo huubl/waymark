@@ -17,21 +17,21 @@ class Waymark_AJAX {
 	function get_attatchment_meta() {
 		check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');
 
-		$response_json = json_encode(array(
+		$response = [
 			'error' => esc_html__('No image metadata available.', 'waymark')
-		));
+		];
 
 		//Get photo metadata
 		if(array_key_exists('attachment_id', $_POST) && is_numeric($_POST['attachment_id'])) {
 			$attachment_metadata = wp_get_attachment_metadata($_POST['attachment_id']);
 
 			if(array_key_exists('image_meta', $attachment_metadata) && is_array($attachment_metadata['image_meta'])) {
-				$response_json = json_encode($attachment_metadata['image_meta']);							
+				$response = $attachment_metadata['image_meta'];
 			}
 		}
 
 		header('Content-Type: text/javascript');
-		echo $response_json;
+		echo json_encode($response);
 		die;
 	}
 	
@@ -56,8 +56,6 @@ class Waymark_AJAX {
 	function public_handle_read_file() {
 		check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');
 
-
-
 		//Change upload location? (empty string means use default Media Library directory)
 		if(Waymark_Config::get_setting('submission', 'from_public', 'submission_upload_dir')) {
 			add_filter('upload_dir', array($this, 'public_upload_dir'));		
@@ -80,7 +78,7 @@ class Waymark_AJAX {
 			Waymark_Helper::require('Front/Waymark_Submission.php');
 			$Submission = new Waymark_Submission;
 
-			$response = array();
+			$response = [];
 
 			//If we have files
 			if(sizeof($_FILES)) {
@@ -125,9 +123,7 @@ class Waymark_AJAX {
 			if(isset($response['error'])) {
 				//Do not continue
 				header('Content-Type: text/javascript');
-				echo json_encode(array(
-					'error' => $response['error']
-				));	
+				echo json_encode($response);	
 
 				die;	
 			//Good to continue
@@ -139,51 +135,40 @@ class Waymark_AJAX {
 	}
 	
 	function read_file() {
+		$response = [];
+		
 		//If we have files
 		if(sizeof($_FILES)) {
 			//Each file
 			foreach($_FILES as $file_key => $file_data) {
+				$response = $file_data;								
+			
 				//If no WP error
-				if(! $file_data['error']) {
-// 					$response_json = json_encode($file_data);
-					
+				if(! $file_data['error']) {				
 					switch($file_key) {
 						//Read file contents
 						case 'add_file' :
-							$file_contents = Waymark_Input::get_file_contents($file_data);				
+							//Attempt to read file
+							$file_contents = Waymark_Input::get_file_contents($file_data);
 							
-							//Good data		
-							if(isset($file_contents['file_type'])) {
-								$response_json = json_encode($file_contents);																	
-							//Error?
-							} elseif(isset($file_contents['error'])) {
-								//Use it
-								$response_json = json_encode(array(
-									'error' => $file_contents['error']
-								));								
+							//Good to proceed
+							if($file_contents) {
+								$response = array_merge($response, $file_contents);
+							//Unknown error
 							} else {
-								//Use it
-								$response_json = json_encode(array(
-									'error' => 'Shit file'
-								));								
-							}
+								$response['error'] = esc_html__('Could not read the file.', 'waymark');
+							}	
 							
 							break;
 						case 'marker_photo' :
 						case 'add_photo' :
-// 							if ( ! function_exists( 'wp_handle_upload' ) ) {
-// 									require_once( ABSPATH . 'wp-admin/includes/file.php' );
-// 							}
- 
  							//Upload
  							$attachment_id = media_handle_upload($file_key, 0);
 							
 							//Get URL
 							$attachment_url = wp_get_attachment_url($attachment_id);
 
-							$response = array(
-								'url' => $attachment_url								
-							);
+							$response['url'] = $attachment_url;
 							
 							//Meta?
 							$attachment_metadata = wp_get_attachment_metadata($attachment_id);
@@ -211,29 +196,21 @@ class Waymark_AJAX {
 									'sizes' => $attachment_metadata['sizes']
 								));
 							}
-							
-							$response_json = json_encode($response);
   
  							break;
 					}								
 				//WP error
-				} else {
-					//Use that
-					$response_json = json_encode(array(
-						'error' => $file_data['error']
-					));				
-				}				
+				}
 			}						
 		}
 		
-		if(! $response_json) {
-			$response_json = json_encode(array(
-				'error' => esc_html__('Unknown file upload error.', 'waymark')
-			));
+		//No response?
+		if(! sizeof($response)) {
+			$response['error'] = esc_html__('Unknown file upload error.', 'waymark');
 		}
 
 		header('Content-Type: text/javascript');
-		echo $response_json;
+		echo json_encode($response);
 		die;
 	}
 }

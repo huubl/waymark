@@ -19,11 +19,25 @@ class Waymark_Config {
 			'shortcode' => 'Waymark',
 			'mimes' => array(
 				'file' => array(
-					'gpx' => 'application/gpx+xml',
-					'kml' => 'application/vnd.google-earth.kml+xml',
-					'kmz' => 'application/vnd.google-earth.kmz',
-					'json' => 'application/geo+json',
-					'geojson' => 'application/geo+json'
+					'gpx' => array(
+						'application/gpx+xml',
+						'application/xml'
+					),
+					'kml' => array(
+						'application/vnd.google-earth.kml+xml',
+						'application/xml'
+					),
+//					'kmz' => 'application/vnd.google-earth.kmz',
+					'json' => array(
+						'application/geo+json',
+						'application/json',						
+						'text/plain'
+					),
+					'geojson' => array(
+						'application/geo+json',
+						'application/json',
+						'text/plain'
+					)
 				)
 			),
 			'meta' => array(

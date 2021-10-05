@@ -403,30 +403,51 @@ class Waymark_Input {
 // 		}
 // 	}
 
-	static function get_file_contents($file) {
-		$allowed_mimes = Waymark_Config::get_item('mimes', 'file');
-
-		//Get the file type of the upload
-		$filetype = wp_check_filetype(basename($file['name']), $allowed_mimes);
-
-		//MIME Type
-		$type_valid = array_key_exists('type', $filetype) && in_array($filetype['type'], $allowed_mimes);
+	static function allowable_file($ext = '', $mime = '', $file_image = 'file') {
+		$allowable_mimes = Waymark_Config::get_item('mimes', $file_image);
 		
-		//File extension
-		$ext_valid = array_key_exists('ext', $filetype) && array_key_exists($filetype['ext'], $allowed_mimes);		
-				 
-		//File type is supported
-		if($type_valid && $ext_valid) {
-	    return array(
-				'file_type' => $filetype['ext'],
-				'file_mime' => $filetype['type'],
-				'file_contents' => file_get_contents($file['tmp_name']),
-				'file_info' => $file	
-			);
-		} else {
-			return array(
-				'error' => esc_html__('The file type uploaded is not supported.', 'waymark')
-			);
+		//Valid extension
+		if(array_key_exists($ext, $allowable_mimes)) {
+			//Check MIME
+			//Single
+			if(is_string($allowable_mimes[$ext])) {
+				return $mime == $allowable_mimes[$ext];
+			//Multiple
+			} elseif(is_array($allowable_mimes[$ext])) {
+				return in_array($mime, $allowable_mimes[$ext]);
+			}
 		}
+		
+		return false;
+	}	
+	
+	static function get_file_contents($file) {
+		$response = [];
+
+		//Ensure file is upload
+		if(is_uploaded_file($file['tmp_name'])) {	
+			//Get extension
+			$file_ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+
+			//Get *actual* MIME type
+			$file_mime = mime_content_type($file['tmp_name']);
+			
+			//Is allowed file
+			if(self::allowable_file($file_ext, $file_mime)) {
+				$response = array_merge($response, array(
+					'file_type' => $file_ext,
+					'file_mime' => $file_mime,
+					'file_contents' => file_get_contents($file['tmp_name']),
+					'file_info' => $file
+				));		
+			//Not allowable file
+			} else {
+				$response['error'] = esc_html__('The file extension uploaded is not supported.', 'waymark');		
+				$response['file_ext'] = $file_ext;
+				$response['file_mime'] = $file_mime;					
+			}						
+		}
+		
+		return $response;
 	}	
 }
