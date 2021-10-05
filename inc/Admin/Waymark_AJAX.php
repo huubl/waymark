@@ -56,6 +56,8 @@ class Waymark_AJAX {
 	function public_handle_read_file() {
 		check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');
 
+
+
 		//Change upload location? (empty string means use default Media Library directory)
 		if(Waymark_Config::get_setting('submission', 'from_public', 'submission_upload_dir')) {
 			add_filter('upload_dir', array($this, 'public_upload_dir'));		
@@ -137,17 +139,13 @@ class Waymark_AJAX {
 	}
 	
 	function read_file() {
-		$response_json = json_encode(array(
-			'error' => esc_html__('Unknown file upload error.', 'waymark')
-		));
-
 		//If we have files
 		if(sizeof($_FILES)) {
 			//Each file
 			foreach($_FILES as $file_key => $file_data) {
 				//If no WP error
 				if(! $file_data['error']) {
-					$response_json = json_encode($file_data);
+// 					$response_json = json_encode($file_data);
 					
 					switch($file_key) {
 						//Read file contents
@@ -162,6 +160,11 @@ class Waymark_AJAX {
 								//Use it
 								$response_json = json_encode(array(
 									'error' => $file_contents['error']
+								));								
+							} else {
+								//Use it
+								$response_json = json_encode(array(
+									'error' => 'Shit file'
 								));								
 							}
 							
@@ -221,6 +224,12 @@ class Waymark_AJAX {
 					));				
 				}				
 			}						
+		}
+		
+		if(! $response_json) {
+			$response_json = json_encode(array(
+				'error' => esc_html__('Unknown file upload error.', 'waymark')
+			));
 		}
 
 		header('Content-Type: text/javascript');
