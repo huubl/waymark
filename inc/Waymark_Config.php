@@ -18,6 +18,8 @@ class Waymark_Config {
 			'multi_value_seperator' => $multi_value_seperator,
 			'shortcode' => 'Waymark',
 			'mimes' => array(
+// 				'image' => array(
+// 					
 				'file' => array(
 					'gpx' => array(
 						'application/gpx+xml',
@@ -25,7 +27,8 @@ class Waymark_Config {
 					),
 					'kml' => array(
 						'application/vnd.google-earth.kml+xml',
-						'application/xml'
+						'application/xml',
+						'text/html'
 					),
 //					'kmz' => 'application/vnd.google-earth.kmz',
 					'json' => array(

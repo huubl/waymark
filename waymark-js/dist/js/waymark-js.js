@@ -8706,21 +8706,23 @@ function Waymark_Map_Editor() {
 			contentType: false,
 		  success: function(response) {		
 				Waymark.debug(response);		  	
+
+				//Error?
+				if(response === null) {
+					Waymark.message(waymark_js_lang.error_file_upload, 'error');					
+					Waymark.loading_stop();																 							 
+
+					return false;
+				} else if(response.error) {
+					Waymark.message(response.error, 'error');					
+					Waymark.loading_stop();																 							 
+			
+					return false;			  
+				}
 		  	
 		  	switch(input.attr('name')) {
 		  		case 'add_file' :
-						if(response === null) {
-							Waymark.message(waymark_js_lang.error_file_upload, 'error');					
-							Waymark.loading_stop();																 							 
-					
-							return;
-						} else if(response.error) {
-							Waymark.message(response.error, 'error');					
-							Waymark.loading_stop();																 							 
-					
-							return;		  			  
-						}
-				
+			
 						Waymark.load_file_contents(response.file_contents, response.file_type);  
 
 		  			break;
