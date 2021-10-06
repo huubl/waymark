@@ -332,6 +332,34 @@ class Waymark_Config {
 		
 		return in_array($type, self::$data['custom_types']) || in_array('waymark_' . $type, self::$data['custom_types']);
 	}
+	
+	public static function get_settings_js() {
+		$settings = get_option('Waymark_Settings');
+		
+		$settings_js = [];
+		
+		//Media library uploads
+		if(isset($settings['misc']['editor_options']['media_library_uploads'])) {
+			$media_library_uploads = $settings['misc']['editor_options']['media_library_uploads'];
+		} else {
+			$media_library_uploads = '0';		
+		}
+		$settings_js['misc']['editor_options']['media_library_uploads'] = $media_library_uploads;
+		
+		//Debug mode
+		//Only admin
+		if(! current_user_can('administrator')) {
+			$debug_mode = '0';				
+		//Setting
+		} elseif(isset($settings['misc']['advanced']['debug_mode'])) {
+			$debug_mode = $settings['misc']['advanced']['debug_mode'];
+		} else {
+			$debug_mode = '0';		
+		}
+		$settings_js['misc']['advanced']['debug_mode'] = $debug_mode;
+
+		return json_encode($settings_js);
+	}
 }
 
 Waymark_Config::init();

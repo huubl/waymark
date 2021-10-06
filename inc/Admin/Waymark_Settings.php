@@ -914,7 +914,8 @@ class Waymark_Settings {
 							'type' => 'boolean',
 							'title' => esc_html__('Debug Mode', 'waymark'),
 							'default' => Waymark_Config::get_setting('misc', 'advanced', 'debug_mode'),
-							'tip' => esc_attr__('With debug mode enabled, the plugin will output Map and Settings data in Admin Dashboard. This may come in handy if you need to report a bug.', 'waymark'),
+							'tip' => esc_attr__('With debug mode enabled, the plugin will output Map and Settings data in Admin Dashboard. This may come in handy if you need to report a bug. Pro Tip! Check the browser console for Waymark output when signed in as an administrator.', 'waymark'),
+							'tip_link' => 'https://developer.mozilla.org/en-US/docs/Tools/Browser_Console',
 							'options' => array(
 								'0' => esc_html__('Disable', 'waymark'),
 								'1' => esc_html__('Enable', 'waymark')								

@@ -39,7 +39,7 @@ class Waymark_Admin {
 		//Add nonce
 		Waymark_JS::add_chunk('//Admin');					
  		Waymark_JS::add_chunk('var waymark_multi_value_seperator  = "' . Waymark_Config::get_item('multi_value_seperator') . '"');	
-		Waymark_JS::add_chunk('var waymark_settings  = ' . json_encode(get_option('Waymark_Settings')));			
+		Waymark_JS::add_chunk('var waymark_settings  = ' . Waymark_Config::get_settings_js());			
 
  		//Debug Mode
  		if(Waymark_Config::get_setting('misc', 'advanced', 'debug_mode')) {

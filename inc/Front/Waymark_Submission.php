@@ -198,7 +198,7 @@ class Waymark_Submission {
 		$content .= '<div id="waymark-map" class="waymark-submission"></div>' . "\n";
 
 		//Output Config
-		Waymark_JS::add_chunk('var waymark_settings  = ' . json_encode(get_option('Waymark_Settings')));					
+		Waymark_JS::add_chunk('var waymark_settings  = ' . Waymark_Config::get_settings_js());			
 		Waymark_JS::add_call('var waymark_user_config = ' . json_encode(Waymark_Config::get_map_config()) . ';');				
 		Waymark_JS::add_call('waymark_user_config.map_height = 600;');				
 
