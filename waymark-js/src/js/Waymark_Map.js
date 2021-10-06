@@ -50,12 +50,14 @@ var waymark_js_localize = {
 	'info_exif_no' : "Image location metadata (EXIF) NOT detected."
 };
 
-if(typeof waymark_js_lang === 'undefined') {
-	var waymark_js_lang = {};
+if(typeof waymark_js === 'undefined') {
+	var waymark_js = {
+		lang: {}
+	}; 
 }
 for(key in waymark_js_localize) {
-	if(typeof waymark_js_lang[key] == 'undefined') {
-		waymark_js_lang[key] = waymark_js_localize[key];
+	if(typeof waymark_js.lang[key] === 'undefined') {
+		waymark_js.lang[key] = waymark_js_localize[key];
 	}
 }
 
@@ -174,9 +176,9 @@ function Waymark_Map() {
 	this.debug = function(thing) {
 		if(this.get_property(waymark_settings, 'misc', 'advanced', 'debug_mode') == true) {
 			if(typeof thing == 'string') {
-				console.log('[' + waymark_js_lang.info_message_prefix + '] ' + thing);			
+				console.log('[' + waymark_js.lang.info_message_prefix + '] ' + thing);			
 			} else {
-				console.log('[' + waymark_js_lang.info_message_prefix + '] ...');			
+				console.log('[' + waymark_js.lang.info_message_prefix + '] ...');			
 				console.log(thing);
 			}
 		}
@@ -188,12 +190,12 @@ function Waymark_Map() {
 			
 			switch(type) {
 				case 'error' :
-					prefix = waymark_js_lang.error_message_prefix;
+					prefix = waymark_js.lang.error_message_prefix;
 					
 					break;
 				default:
 				case 'info' :
-					prefix = waymark_js_lang.info_message_prefix;
+					prefix = waymark_js.lang.info_message_prefix;
 
 					break;			
 			}
@@ -288,8 +290,8 @@ function Waymark_Map() {
 		//Zoom Control
 		Waymark_L.control.zoom({
 			position: Waymark.config.map_options.button_position,
-			zoomInTitle: waymark_js_lang.action_zoom_in,
-			zoomOutTitle: waymark_js_lang.action_zoom_out			
+			zoomInTitle: waymark_js.lang.action_zoom_in,
+			zoomOutTitle: waymark_js.lang.action_zoom_out			
 		}).addTo(Waymark.map);
 
 		//Locate Button
@@ -298,7 +300,7 @@ function Waymark_Map() {
 			'icon': 'ion ion-android-locate',
 			'drawCircle' : false,
 			'strings': {
-				'title': waymark_js_lang.action_locate_activate
+				'title': waymark_js.lang.action_locate_activate
 			},
 			'locateOptions': {
 				'enableHighAccuracy': true		
@@ -312,8 +314,8 @@ function Waymark_Map() {
 		Waymark_L.control.fullscreen({
 			position: Waymark.config.map_options.button_position,
 			title: {
-				'false': waymark_js_lang.action_fullscreen_activate,
-				'true': waymark_js_lang.action_fullscreen_deactivate
+				'false': waymark_js.lang.action_fullscreen_activate,
+				'true': waymark_js.lang.action_fullscreen_deactivate
 			}
 		}).addTo(Waymark.map);
 
@@ -949,11 +951,11 @@ function Waymark_Map() {
 	
 	this.get_exif_latlng = function(data) {
 		if(data.GPSLatitudeNum && !isNaN(data.GPSLatitudeNum) && data.GPSLongitudeNum && !isNaN(data.GPSLongitudeNum)) {
-			Waymark.debug(waymark_js_lang.info_exif_yes);
+			Waymark.debug(waymark_js.lang.info_exif_yes);
 
 			return L.latLng(data.GPSLatitudeNum, data.GPSLongitudeNum);
 		}	else {
-			Waymark.debug(waymark_js_lang.info_exif_no);							  			
+			Waymark.debug(waymark_js.lang.info_exif_no);							  			
 		}
 		
 		return false;
