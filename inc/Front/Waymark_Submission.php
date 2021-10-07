@@ -199,7 +199,50 @@ class Waymark_Submission {
 
 		//Output Config
 		Waymark_JS::add_chunk('var waymark_settings  = ' . Waymark_Config::get_settings_js());			
-		Waymark_JS::add_call('var waymark_user_config = ' . json_encode(Waymark_Config::get_map_config()) . ';');				
+
+		//Get Map config
+		$map_config = Waymark_Config::get_map_config();
+
+		//Each Overlay Type
+		foreach(['marker', 'line', 'shape'] as $overlay_name) {
+			$submission_types = [];
+			//Only include Types set for Submissions
+			foreach($map_config[$overlay_name . '_types'] as $type) {
+				if($type[$overlay_name . '_submission']) {
+					$submission_types[] = $type;
+				}	
+			}
+			
+			//If none (i.e. no Types set to Submission in Settings)
+			if(! sizeof($submission_types)) {
+				//Create blank
+				$blank = [];
+				foreach(array_keys($type) as $key) {
+					switch($key) {
+						case 'fill_opacity':
+							$value = '0.5';
+							
+							break;
+						case 'line_colour' :
+						case 'marker_colour' :
+							$value = '#000';
+
+							break;
+						default:
+							$value = '';
+							
+							break;
+					}
+					$blank[$key] = $value;
+				}
+				$submission_types[] = $blank;
+			}
+			
+			//Update Config
+			$map_config[$overlay_name . '_types'] = $submission_types;
+		}
+		
+		Waymark_JS::add_call('var waymark_user_config = ' . json_encode($map_config) . ';');				
 		Waymark_JS::add_call('waymark_user_config.map_height = 600;');				
 
 		//Set basemap
