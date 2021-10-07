@@ -159,6 +159,17 @@ class Waymark_Settings {
 								'(is_numeric($param_value)) ? $param_value : 1;'	//Fallback
 							)					
 						),
+						'marker_submission' => array(
+							'name' => 'marker_submission',
+							'id' => 'marker_submission',
+							'type' => 'boolean',
+							'title' => '<span class="waymark-invisible">' . esc_html__('Marker', 'waymark') . '</span> ' . esc_html__('Submissions?', 'waymark'),
+							'default' => Waymark_Config::get_setting('markers', 'marker_types', 'marker_submission'),
+							'tip' => esc_attr__('Public submissions?', 'waymark'),
+							'input_processing' => array(
+								'(is_numeric($param_value)) ? $param_value : 1;'	//Fallback
+							)					
+						),						
 						'icon_type' => array(
 							'name' => 'icon_type',
 							'id' => 'icon_type',
@@ -264,7 +275,18 @@ class Waymark_Settings {
 							'input_processing' => array(
 								'(is_numeric($param_value)) ? $param_value : 1;'	//Fallback
 							)					
-						)
+						),
+						'line_submission' => array(
+							'name' => 'line_submission',
+							'id' => 'line_submission',
+							'type' => 'boolean',
+							'title' => '<span class="waymark-invisible">' . esc_html__('Line', 'waymark') . '</span> ' . esc_html__('Submissions?', 'waymark'),
+							'default' => Waymark_Config::get_setting('lines', 'line_types', 'line_submission'),
+							'tip' => esc_attr__('Public submissions?', 'waymark'),
+							'input_processing' => array(
+								'(is_numeric($param_value)) ? $param_value : 1;'	//Fallback
+							)					
+						)						
 					)																	
 				)
 			)
@@ -331,7 +353,18 @@ class Waymark_Settings {
 							'input_processing' => array(
 								'(is_numeric($param_value)) ? $param_value : 1;'	//Fallback
 							)					
-						)
+						),
+						'shape_submission' => array(
+							'name' => 'shape_submission',
+							'id' => 'shape_submission',
+							'type' => 'boolean',
+							'title' => '<span class="waymark-invisible">' . esc_html__('Shape', 'waymark') . '</span> ' . esc_html__('Submissions?', 'waymark'),
+							'default' => Waymark_Config::get_setting('shapes', 'shape_types', 'shape_submission'),
+							'tip' => esc_attr__('Public submissions?', 'waymark'),
+							'input_processing' => array(
+								'(is_numeric($param_value)) ? $param_value : 1;'	//Fallback
+							)					
+						)												
 					)																	
 				)
 			)
@@ -465,14 +498,6 @@ class Waymark_Settings {
 				)				
 			)			
 		);	
-
-		//Submissions not enabled
-		if(! Waymark_Config::get_setting('submission', 'global', 'submission_enable')) {
-			//Hide settings_fields
-			$this->tabs['meta']['sections']['inputs']['fields']['meta_submission']['class'] = ' waymark-hidden';
-		}
-		
-// 		if(! in_array('meta', Waymark_Config::get_setting('submission', 'submission_options', 'submission_features'))) {
 
 		//Prepare Basemap values for editor option
 		$tile_layers = Waymark_Config::get_item('tiles', 'layers', true);
@@ -644,10 +669,17 @@ class Waymark_Settings {
 
 		//Submissions not enabled
 		if(! Waymark_Config::get_setting('submission', 'global', 'submission_enable')) {
+			//Hide related inputs
+			$this->tabs['meta']['sections']['inputs']['fields']['meta_submission']['class'] = ' waymark-hidden';
+			
+			$this->tabs['markers']['sections']['marker_types']['fields']['marker_submission']['class'] = 'waymark-hidden';
+			$this->tabs['lines']['sections']['line_types']['fields']['line_submission']['class'] = 'waymark-hidden';
+			$this->tabs['shapes']['sections']['shape_types']['fields']['shape_submission']['class'] = 'waymark-hidden';
+
 			$this->tabs['submission']['sections']['from_users']['class'] = 'waymark-hidden';		
 			$this->tabs['submission']['sections']['from_public']['class'] = 'waymark-hidden';		
 		//If No public submissions
-		}elseif(! Waymark_Config::get_setting('submission', 'from_public', 'submission_public')) {
+		} elseif(! Waymark_Config::get_setting('submission', 'from_public', 'submission_public')) {
 			//Hide settings
 			$this->tabs['submission']['sections']['from_public']['fields']['submission_features']['class'] .= ' waymark-hidden';
 			$this->tabs['submission']['sections']['from_public']['fields']['submission_status']['class'] .= ' waymark-hidden';
