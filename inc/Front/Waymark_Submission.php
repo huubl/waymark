@@ -132,21 +132,25 @@ class Waymark_Submission {
 	public function render_front($data = array()) {
 		//Load CSS/Scripts for rich text editor
 		wp_enqueue_editor();
+
+		$content = '<!-- START Waymark Submission -->' . "\n";
+		$content .= '<div id="waymark-submission">' . "\n";
 	
 		//Ensure Submissions allowed
 		if(! $this->allowed) {
-			return false;
+			$content .= '</div>' . "\n";
+			$content .= '<!-- END Waymark Submission -->' . "\n";
+			
+			return $content;
 		}
 
 		global $post;
-		
-		$content = '';
-			
+				
 		//Messages
 		if(array_key_exists('waymark_status', $_REQUEST)) {
 			switch($_REQUEST['waymark_status']) {
 				case 'error' :
-					$content .= '<div class="waymark-message waymark-error">' . "\n";
+					$content .= '<div class="waymark-message waymark-error">';
 
 					//Custom message?
 					if(isset($_REQUEST['waymark_message'])) {
@@ -159,13 +163,13 @@ class Waymark_Submission {
 
 					break;
 				case 'draft' :
-					$content .= '<div class="waymark-message waymark-success">' . "\n";
+					$content .= '	<div class="waymark-message waymark-success">';
 					$content .= __('Your submission has been received and is awaiting moderation.', 'waymark');
-					$content .= '</div>' . "\n";					
+					$content .= '	</div>' . "\n";					
 
 					break;
 				case 'publish' :
-					$content .= '<div class="waymark-message waymark-success">' . "\n";
+					$content .= '	<div class="waymark-message waymark-success">';
 
 					//Custom message?
 					if(isset($_REQUEST['waymark_map_id'])) {
@@ -174,7 +178,7 @@ class Waymark_Submission {
 						$content .= __('Your submission has been published.', 'waymark');
 					}
 
-					$content .= '</div>' . "\n";					
+					$content .= '	</div>' . "\n";					
 
 					break;
 			}
@@ -195,7 +199,7 @@ class Waymark_Submission {
 		}
 
 		//Map Div
-		$content .= '<div id="waymark-map" class="waymark-submission"></div>' . "\n";
+		$content .= '	<div id="waymark-map" class="waymark-submission"></div>' . "\n";
 
 		//Output Config
 		Waymark_JS::add_chunk('var waymark_settings  = ' . Waymark_Config::get_settings_js());			
@@ -261,28 +265,31 @@ class Waymark_Submission {
 			");
 		}
 
-		$content .= '<form action="' . Waymark_Helper::http_url() . '" method="post" id="waymark-map-add" class="waymark-map-add">' . "\n";
-		$content .= '	<input type="hidden" name="waymark_action" value="public_add_map" />' . "\n";
-		$content .= '	<input type="hidden" name="waymark_security" value="' . wp_create_nonce('Waymark_Nonce') . '" />' . "\n";
-		$content .= '	<input type="hidden" name="waymark_redirect" value="' . get_permalink($post) . '" />' . "\n";
+		$content .= '	<form action="' . Waymark_Helper::http_url() . '" method="post" id="waymark-map-add" class="waymark-map-add">' . "\n";
+		$content .= '		<input type="hidden" name="waymark_action" value="public_add_map" />' . "\n";
+		$content .= '		<input type="hidden" name="waymark_security" value="' . wp_create_nonce('Waymark_Nonce') . '" />' . "\n";
+		$content .= '		<input type="hidden" name="waymark_redirect" value="' . get_permalink($post) . '" />' . "\n";
 	
 		//Title
 		if(in_array('title', $this->features)) {
-			$content .= '	<div class="waymark-control-group waymark-control-type-text" id="map_date-container">' . "\n";
-			$content .= '		<label class="waymark-control-label" for="map_date">' . __('Title', 'waymark') . '</label>' . "\n";
-			$content .= '		<div class="waymark-controls">' . "\n";
-			$content .= '			<input class="waymark-input" type="text" name="map_title" id="map_title" value="">' . "\n";
-			$content .= '		</div>' . "\n";
-			$content .= '	</div>' . "\n";		
+			$content .= '		<div class="waymark-control-group waymark-control-type-text" id="map_date-container">' . "\n";
+			$content .= '			<label class="waymark-control-label" for="map_date">' . __('Title', 'waymark') . '</label>' . "\n";
+			$content .= '			<div class="waymark-controls">' . "\n";
+			$content .= '				<input class="waymark-input" type="text" name="map_title" id="map_title" value="">' . "\n";
+			$content .= '			</div>' . "\n";
+			$content .= '		</div>' . "\n";		
 		}
 
 		//Create Form
 		$Map = new Waymark_Map;		
 		$content .= $Map->create_form();		
 
-		$content .= '	<input type="submit" value="' . __('Submit', 'waymark') . '" class="button button-primary button-large" />' . "\n";
+		$content .= '		<input type="submit" value="' . __('Submit', 'waymark') . '" class="button button-primary button-large" />' . "\n";
 
-		$content .= '</form>' . "\n";
+		$content .= '	</form>' . "\n";
+
+		$content .= '</div>' . "\n";
+		$content .= '<!-- END Waymark Submission -->' . "\n";
 
 		return $content;		
 	}	
@@ -327,6 +334,8 @@ class Waymark_Submission {
 			$this->redirect_url .= (strpos($this->redirect_url, '?') === false) ? '?' : '&';
 
 			$this->redirect_url .= http_build_query($this->redirect_data);				
+			
+			$this->redirect_url .= '#waymark-submission';
 		}
 	
 		wp_redirect($this->redirect_url);
