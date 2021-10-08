@@ -624,14 +624,21 @@ div#waymark-admin-container {
 		}
 		table.form-table {
 			margin-bottom: 30px;
-			th {
-				padding: 10px 20px;
-				width: 160px;
-				vertical-align: middle;
+			tr {
+				&.waymark-align-top {
+					th {
+						vertical-align: top;
+					}
+				}
+				th {
+					padding: 10px 20px;
+					width: 160px;
+					vertical-align: middle;
+				}
+				td {
+					padding: 0;
+				}					
 			}
-			td {
-				padding: 0;
-			}		
 		}
 		select,
 		input[type="file"],
@@ -940,24 +947,24 @@ body.wp-admin {
  * ============== DEBUG ===============
  * ====================================
  */
- body {
-	 div.waymark-settings-section-advanced {
-			.form-table {
-				tr:last-child {
-					display: none;
-					th {
-						vertical-align: top !important;						
-					}
-				}
-			}
-		}
-	 &.waymark-debug {
-		 div.waymark-settings-section-advanced {
-				.form-table {
-					tr:last-child {
-						display: table-row;
-					}
-				}
-			}		 
-	 }
- }
+//  body {
+// 	 div.waymark-settings-section-advanced {
+// 			.form-table {
+// 				tr:last-child {
+// 					display: none;
+// 					th {
+// 						vertical-align: top !important;						
+// 					}
+// 				}
+// 			}
+// 		}
+// 	 &.waymark-debug {
+// 		 div.waymark-settings-section-advanced {
+// 				.form-table {
+// 					tr:last-child {
+// 						display: table-row;
+// 					}
+// 				}
+// 			}		 
+// 	 }
+//  }

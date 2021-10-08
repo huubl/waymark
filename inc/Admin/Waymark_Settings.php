@@ -165,7 +165,7 @@ class Waymark_Settings {
 							'type' => 'boolean',
 							'title' => '<span class="waymark-invisible">' . esc_html__('Marker', 'waymark') . '</span> ' . esc_html__('Submissions?', 'waymark'),
 							'default' => Waymark_Config::get_setting('markers', 'marker_types', 'marker_submission'),
-							'tip' => esc_attr__('Public submissions?', 'waymark'),
+							'tip' => esc_attr__('Make this Type available in front-end Submissions?', 'waymark'),
 							'input_processing' => array(
 								'(is_numeric($param_value)) ? $param_value : 1;'	//Fallback
 							)					
@@ -282,7 +282,7 @@ class Waymark_Settings {
 							'type' => 'boolean',
 							'title' => '<span class="waymark-invisible">' . esc_html__('Line', 'waymark') . '</span> ' . esc_html__('Submissions?', 'waymark'),
 							'default' => Waymark_Config::get_setting('lines', 'line_types', 'line_submission'),
-							'tip' => esc_attr__('Public submissions?', 'waymark'),
+							'tip' => esc_attr__('Make this Type available in front-end Submissions?', 'waymark'),
 							'input_processing' => array(
 								'(is_numeric($param_value)) ? $param_value : 1;'	//Fallback
 							)					
@@ -360,7 +360,7 @@ class Waymark_Settings {
 							'type' => 'boolean',
 							'title' => '<span class="waymark-invisible">' . esc_html__('Shape', 'waymark') . '</span> ' . esc_html__('Submissions?', 'waymark'),
 							'default' => Waymark_Config::get_setting('shapes', 'shape_types', 'shape_submission'),
-							'tip' => esc_attr__('Public submissions?', 'waymark'),
+							'tip' => esc_attr__('Make this Type available in front-end Submissions?', 'waymark'),
 							'input_processing' => array(
 								'(is_numeric($param_value)) ? $param_value : 1;'	//Fallback
 							)					
@@ -471,7 +471,7 @@ class Waymark_Settings {
 							'class' => '',	
 							'title' => '<span class="waymark-invisible">' . esc_html__('Meta', 'waymark') . '</span> ' . esc_html__('In Submissions?', 'waymark'),									
 							'default' => Waymark_Config::get_setting('meta', 'inputs', 'meta_submission'),
-							'tip' => esc_attr__('Public submissions allowed?', 'waymark'),
+							'tip' => esc_attr__('Make this Meta available in front-end Submissions?', 'waymark'),
 						)
 					)																										
 				),
@@ -528,8 +528,9 @@ class Waymark_Settings {
 		$this->tabs['submission'] = array(
 			'name' => esc_html__('Submissions', 'waymark'),
 			'description' => '
-				<h2>Submissions</h2>
-				<!--<p>Site administrators can submit Maps from the front-end using this Shortcode:<br /><span class="waymark-code">[Waymark content="submission"]</span></small>-->',
+				<h2>' . __('Front-End Submissions', 'waymark') . '</h2>
+				<p class="lead">' . sprintf(__('Use the %s Shortcode to allow Map submissions from the front-end of your site.', 'waymark'), '<span class="waymark-code">[Waymark content="submission"]</span>') . '</p>
+			',
 			'sections' => array(
 				//Global
 				'global' => array(
@@ -542,31 +543,33 @@ class Waymark_Settings {
 							'type' => 'boolean',
 							'title' => esc_html__('Allow Submissions', 'waymark'),
 							'default' => Waymark_Config::get_setting('submission', 'global', 'submission_enable'),
-							'tip' => esc_attr__('Enable Submissions on the front-end?', 'waymark')
+							'tip' => esc_attr__('Submissions are available to site administrators by default, but can also be allowed for registered users or even without registration.', 'waymark')
 						),					
 					)
 				),
 				//By role
 				'from_users' => array(
 					'title' => esc_html__('User Submissions', 'waymark'),
-					'description' => esc_html__('Registered users can also submit Maps from the front-end.', 'waymark'),
+					'description' => esc_html__('Allow registered users to create Maps from the front-end.', 'waymark'),
 					'fields' => array(
 						'submission_roles' => array(
 							'name' => 'submission_roles',
 							'id' => 'submission_roles',
 							'type' => 'select_multi',
+							'class' => 'waymark-align-top',
 							'title' => esc_html__('Allow From', 'waymark'),
 							'default' => Waymark_Config::get_setting('submission', 'from_users', 'submission_roles'),
-							'tip' => esc_attr__('Who can make submissions?', 'waymark'),
+							'tip' => esc_attr__('Users with the selected roles will be able to make Submissions through the front-end', 'waymark'),
 							'options' => $role_options
 						),
 						'submission_features' => array(
 							'name' => 'submission_features',
 							'id' => 'submission_features',
 							'type' => 'select_multi',
+							'class' => 'waymark-align-top',							
 							'title' => esc_html__('Editor Features', 'waymark'),
 							'default' => Waymark_Config::get_setting('submission', 'from_users', 'submission_features'),
-							'tip' => esc_attr__('What features to offer in the Editor.', 'waymark'),
+							'tip' => esc_attr__('What features to offer in the Editor. Important! Uploaded images are added to the Media Library (see Upload Location below), reading from file does not keep a copy of the file on the server. Whether an individual Meta input is displayed can be set in the Settings > Meta.', 'waymark'),
 							'options' => array(
 								'draw' => esc_attr__('Drawing', 'waymark'),
 								'photo' => esc_attr__('Photo upload', 'waymark'),
@@ -581,7 +584,7 @@ class Waymark_Settings {
 							'type' => 'select',
 							'title' => esc_html__('Post Status', 'waymark'),
 							'default' => Waymark_Config::get_setting('submission', 'from_users', 'submission_status'),
-							'tip' => esc_attr__('Initial status of post.', 'waymark'),
+							'tip' => esc_attr__('This is the initial status of the submitted Map. Note! Publish means that the Map (including any images added) will be publicly visible instantly.', 'waymark'),
 							'options' => array(
 								'publish' => esc_attr__('Publish', 'waymark'),
 								'draft' => esc_attr__('Draft', 'waymark')
@@ -609,23 +612,23 @@ class Waymark_Settings {
 							'type' => 'boolean',
 							'title' => esc_html__('Public Submissions', 'waymark'),
 							'default' => Waymark_Config::get_setting('submission', 'from_public', 'submission_public'),
-							'tip' => esc_attr__('Whether to allow submissions.', 'waymark')
+							'tip' => esc_attr__('Allow *anyone* to submit Maps to your site, without registration.', 'waymark')
 						),
 						'submission_features' => array(
 							'name' => 'submission_features',
 							'id' => 'submission_features',
 							'type' => 'select_multi',
+							'class' => 'waymark-align-top',							
 							'title' => esc_html__('Editor Features', 'waymark'),
 							'default' => Waymark_Config::get_setting('submission', 'from_public', 'submission_features'),
-							'tip' => esc_attr__('What features to offer in the Editor.', 'waymark'),
+							'tip' => esc_attr__('What features to offer in the Editor. Important! Uploaded images are added to the Media Library (see Upload Location below), reading from file does not keep a copy of the file on the server. Whether an individual Meta input is displayed can be set in the Settings > Meta.', 'waymark'),
 							'options' => array(
 								'draw' => esc_attr__('Drawing', 'waymark'),
 								'photo' => esc_attr__('Photo upload', 'waymark'),
 								'file' => esc_attr__('Read from File', 'waymark'),
 								'title' => esc_attr__('Title', 'waymark'),
 								'meta' => esc_attr__('Meta', 'waymark')
-							),
-							'class' => ''
+							)
 						),
 						'submission_upload_dir' => array(
 							'name' => 'submission_upload_dir',
@@ -633,10 +636,10 @@ class Waymark_Settings {
 							'type' => 'select',
 							'title' => esc_html__('Upload Location', 'waymark'),
 							'default' => Waymark_Config::get_setting('submission', 'from_public', 'submission_upload_dir'),
-							'tip' => esc_attr__('Photo upload location', 'waymark'),
+							'tip' => esc_attr__('Photos upload by non-registered users can be stored seperately from other Media Library uploads, to aid with moderation. All uploaded images will be stored in a single directory (/waymark_submission) found in the upload root.', 'waymark'),
 							'class' => '',
 							'options' => array(
-								'waymark_submission' => esc_attr__('Sandboxed (/waymark_submission)', 'waymark'),
+								'waymark_submission' => esc_attr__('Seperated (/waymark_submission)', 'waymark'),
 								'' => sprintf(esc_attr__('Media Library Default (%s)', 'waymark'), $upload_dir['subdir']),
 							)			
 						),
@@ -646,10 +649,10 @@ class Waymark_Settings {
 							'type' => 'select',
 							'title' => esc_html__('Post Status', 'waymark'),
 							'default' => Waymark_Config::get_setting('submission', 'from_public', 'submission_status'),
-							'tip' => esc_attr__('Initial status of post.', 'waymark'),
+							'tip' => esc_attr__('This is the initial status of the submitted Map. Note! Publish means that the Map (including any images added) will be publicly visible instantly.', 'waymark'),
 							'options' => array(
-								'publish' => esc_attr__('Publish (not recommended!)', 'waymark'),
-								'draft' => esc_attr__('Draft', 'waymark')
+								'draft' => esc_attr__('Draft', 'waymark'),
+								'publish' => esc_attr__('Publish (not recommended!)', 'waymark')
 							),
 							'class' => ''					
 						),
@@ -957,6 +960,7 @@ class Waymark_Settings {
 							'name' => 'settings_output',
 							'id' => 'settings_output',
 							'type' => 'textarea',
+							'class' => 'waymark-align-top',							
 							'title' => esc_html__('Settings Data', 'waymark'),
 							'default' => json_encode(get_option('Waymark_Settings')),
 							//Don't save to DB
