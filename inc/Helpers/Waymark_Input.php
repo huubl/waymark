@@ -58,6 +58,12 @@ class Waymark_Input {
 	
 		//Tip
 		if(array_key_exists('tip', $field)) {
+			//Add missing periods
+			$last_char = $field['tip'][strlen($field['tip'])-1];
+			if(! in_array($last_char, ['.', '?', '!'])) {
+				$field['tip'] .= '.';
+			}
+			
 			$out .= ' <a data-title="' . $field['tip'] . '';
 			if(array_key_exists('tip_link', $field)) {
 				$out .= ' ' . esc_attr__('Click here for more details.', 'waymark') . '" href="' . $field['tip_link'] . '" target="_blank" class="waymark-tooltip waymark-link"';					
