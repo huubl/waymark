@@ -109,6 +109,10 @@ A big thank you to the following projects and their contributors. Without their 
 
 ## Changelog ##
 
+### 0.9.18-a1 ###
+
+* **Submissions**
+
 ### 0.9.17.2-b1 ###
 
 * Fixed a bug where Shortcode Headers were not displaying on Collection archive pages. Thanks to <a href="https://wordpress.org/support/users/meggsico/">meggsico</a> for <a href="https://wordpress.org/support/topic/maybe-a-bug-7/#post-14815812">bringing this to my attention</a>.
