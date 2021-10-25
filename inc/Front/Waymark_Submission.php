@@ -267,7 +267,7 @@ class Waymark_Submission {
 
 		$content .= '	<form action="' . Waymark_Helper::http_url() . '" method="post" id="waymark-map-add" class="waymark-map-add">' . "\n";
 		$content .= '		<input type="hidden" name="waymark_action" value="public_add_map" />' . "\n";
-		$content .= '		<input type="hidden" name="waymark_security" value="' . wp_create_nonce('Waymark_Nonce') . '" />' . "\n";
+		$content .= '		<input type="hidden" name="waymark_security" value="' . wp_create_nonce(Waymark_Config::get_item('nonce_string')) . '" />' . "\n";
 		$content .= '		<input type="hidden" name="waymark_redirect" value="' . get_permalink($post) . '" />' . "\n";
 	
 		//Title

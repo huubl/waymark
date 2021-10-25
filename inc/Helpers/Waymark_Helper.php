@@ -702,7 +702,7 @@ class Waymark_Helper {
 		$out .= '		<option value="geojson">GeoJSON</option>' . "\n";
 		$out .= '	</select>' . "\n";
 		$out .= '	<input type="hidden" name="waymark_action" value="download_map_data" />' . "\n";
-		$out .= '	<input type="hidden" name="waymark_security" value="' . wp_create_nonce('Waymark_Nonce') . '" />' . "\n";
+		$out .= '	<input type="hidden" name="waymark_security" value="' . wp_create_nonce(Waymark_Config::get_item('nonce_string')) . '" />' . "\n";
 		$out .= '	<input type="hidden" name="map_data" value="" />' . "\n";
 		$out .= '	<input type="hidden" name="map_id" value="' . $Map->post_id . '" />' . "\n";
 		$out .= '	<input type="submit" value="' . __('Download', 'waymark') . '" class="button" />' . "\n";
