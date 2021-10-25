@@ -28,7 +28,7 @@ class Waymark_HTTP {
 		//Action
 		//!!! Submission
 		if(array_key_exists('waymark_message', $_REQUEST)) {	
-			Waymark_Helper::debug('Joetest!' . $_REQUEST['waymark_message'], false);
+			//Waymark_Helper::debug('Joetest!' . $_REQUEST['waymark_message'], false);
 		}
 
 		//Action

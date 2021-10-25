@@ -687,6 +687,7 @@ class Waymark_Settings {
 			$this->tabs['submission']['sections']['from_public']['fields']['submission_features']['class'] .= ' waymark-hidden';
 			$this->tabs['submission']['sections']['from_public']['fields']['submission_status']['class'] .= ' waymark-hidden';
 			$this->tabs['submission']['sections']['from_public']['fields']['submission_alert']['class'] .= ' waymark-hidden';						
+			$this->tabs['submission']['sections']['from_public']['fields']['submission_upload_dir']['class'] .= ' waymark-hidden';
 		}
 		
 		// ==================== Misc ====================

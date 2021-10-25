@@ -23,12 +23,14 @@ class Waymark_Config {
 				'file' => array(
 					'gpx' => array(
 						'application/gpx+xml',
-						'application/xml'
+						'application/xml',
+						'text/xml'
 					),
 					'kml' => array(
 						'application/vnd.google-earth.kml+xml',
 						'application/xml',
-						'text/html'
+						'text/html',
+						'text/xml'
 					),
 //					'kmz' => 'application/vnd.google-earth.kmz',
 					'json' => array(
