@@ -9,7 +9,6 @@ class Waymark_HTTP {
 		//Setup AJAX
 		Waymark_JS::add_chunk('//HTTP');					
 		Waymark_JS::add_chunk('var waymark_http_endpoint = "' . Waymark_Helper::http_url() . '";');					
-		Waymark_JS::add_chunk('var waymark_http_security = "' . wp_create_nonce(Waymark_Config::get_item('nonce_string')) . '";');					
 	}
 
 	public function query_vars($vars) {

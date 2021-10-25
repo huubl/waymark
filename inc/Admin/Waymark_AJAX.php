@@ -11,7 +11,7 @@ class Waymark_AJAX {
 		add_action('wp_ajax_waymark_get_attatchment_meta', array($this, 'get_attatchment_meta'));				
 		
 		//Add nonce
-		Waymark_JS::add_chunk('var waymark_ajax_security = "' . wp_create_nonce(Waymark_Config::get_item('nonce_string')) . '";');					
+		Waymark_JS::add_chunk('var waymark_security = "' . wp_create_nonce(Waymark_Config::get_item('nonce_string')) . '";');					
 	}
 
 	function get_attatchment_meta() {

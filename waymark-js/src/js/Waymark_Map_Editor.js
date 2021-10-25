@@ -210,7 +210,7 @@ function Waymark_Map_Editor() {
 							
 							//Get Photo EXIF
 							var form_data = new FormData();
-							form_data.append('waymark_security', waymark_ajax_security);			
+							form_data.append('waymark_security', waymark_security);			
 							form_data.append('action', 'waymark_get_attatchment_meta');			
 							form_data.append('attachment_id', attachment.id);			
 						
@@ -410,7 +410,7 @@ function Waymark_Map_Editor() {
 
 		//Create form data
 		var form_data = new FormData();
-		form_data.append('waymark_security', waymark_ajax_security);			
+		form_data.append('waymark_security', waymark_security);			
 		form_data.append('action', 'waymark_read_file');			
 		form_data.append(input.attr('name'), input[0].files[0]);			
 		
