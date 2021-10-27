@@ -1,19 +1,61 @@
 @import (reference) "Waymark_Map.less";
 
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /*
 	==================================
 	============= EDITOR =============
 	==================================
 */
 .waymark-map-container {
+	#waymark-loading {
+		display: none;
+	}
 	&.waymark-is-editor {
 		&.waymark-loading {
+			opacity: 0.6 !important;
 			cursor: wait;
 			* {
 				cursor: wait;
 			}
+			#waymark-loading {
+				display: block;
+			}			
 		}
 		
+		//Loading
+		//Thanks! https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_loader2
+		//And https://css-tricks.com/centering-css-complete-guide/
+		#waymark-loading {	
+			position: relative;	
+			width: 100%;
+			height: 100%;
+			z-index: 400;
+			.waymark-spinner {
+				position: absolute;
+				top: 50%;
+				height: 100px;
+				margin: -50px auto 0 auto; 
+				position: relative;
+				border: 8px solid transparent;
+				border-radius: 50%;
+				border-top: 8px solid @waymark-primary;
+				border-bottom: 8px solid @waymark-primary;
+				width: 100px;
+				height: 100px;
+				-webkit-animation: spin 2s linear infinite;
+				animation: spin 2s linear infinite;			
+			}
+		}
+
 		//Toolbar
 		div.waymark-edit-toolbar {
 			* {

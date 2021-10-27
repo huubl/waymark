@@ -18,6 +18,15 @@ function Waymark_Map_Editor() {
 		Waymark.mode = 'edit';
 		jQuery(Waymark.map.getContainer()).addClass('waymark-is-editor');
 
+		//Add loading
+		Waymark.jq_map_container.append(
+			jQuery('<div />')
+				.attr({
+					'id' : 'waymark-loading'
+				})
+				.html('<div class="waymark-spinner"></div>')
+		);
+
 		//Every time a layer is created
 		Waymark.map.on('editable:drawing:commit', function (e) {
       layer = e.layer;
