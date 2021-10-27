@@ -17,6 +17,7 @@ class Waymark_Config {
 			'directory_url' => 'https://wordpress.org/support/plugin/waymark/',
 			'multi_value_seperator' => $multi_value_seperator,
 			'shortcode' => 'Waymark',
+			'media_library_sizes' => ['thumbnail', 'medium', 'large', 'full'],
 			'mimes' => array(
 // 				'image' => array(
 // 					

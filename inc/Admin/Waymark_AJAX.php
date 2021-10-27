@@ -9,10 +9,22 @@ class Waymark_AJAX {
 		//User
 		add_action('wp_ajax_waymark_read_file', array($this, 'handle_read_file'));				
 		add_action('wp_ajax_waymark_get_attatchment_meta', array($this, 'get_attatchment_meta'));				
-		
+
 		//Add nonce
 		Waymark_JS::add_chunk('var waymark_security = "' . wp_create_nonce(Waymark_Config::get_item('nonce_string')) . '";');					
 	}
+
+	//Only crunch the sizes we want
+	function intermediate_image_sizes_advanced($sizes) {
+		foreach($sizes as $size_key => $size_data) {
+			if(! in_array($size_key, Waymark_Config::get_item('media_library_sizes'))) {
+				unset($sizes[$size_key]);
+			}
+		}
+		
+		return $sizes;
+	}
+
 
 	function get_attatchment_meta() {
 		check_ajax_referer(Waymark_Config::get_item('nonce_string'), 'waymark_security');
@@ -60,6 +72,9 @@ class Waymark_AJAX {
 		if(Waymark_Config::get_setting('submission', 'from_public', 'submission_upload_dir')) {
 			add_filter('upload_dir', array($this, 'public_upload_dir'));		
 		}
+
+		//Only crunch the sizes we want
+		add_filter('intermediate_image_sizes_advanced', array($this, 'intermediate_image_sizes_advanced'));				
 
 		$this->handle_read_file();
 	}
