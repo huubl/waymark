@@ -198,7 +198,6 @@ function Waymark_Map_Editor() {
 				button.onclick = function() {
 					//Use Media Library (back-end only)?				
 					if(typeof wp.media != 'undefined') {
-//					if(typeof wp.media != 'undefined' && Waymark.get_property(waymark_settings, 'misc', 'editor_options', 'media_library_uploads') == true) {
 						//Thanks to: https://mycyberuniverse.com/integration-wordpress-media-uploader-plugin-options-page.html
 						wp.media.editor.send.attachment = function(props, attachment) {		
 							Waymark.debug(attachment);
@@ -834,9 +833,8 @@ function Waymark_Map_Editor() {
 						}).on('click', function(e) {
 							e.preventDefault();
 
-							//Use Media Library (back-end only)?				
+							//Media Library present...				
 							if(typeof wp.media != 'undefined') {
-		//					if(typeof wp.media != 'undefined' && Waymark.get_property(waymark_settings, 'misc', 'editor_options', 'media_library_uploads') == true) {
 								//Thanks to: https://mycyberuniverse.com/integration-wordpress-media-uploader-plugin-options-page.html
 								wp.media.editor.send.attachment = function(props, attachment) {		
 									Waymark.debug(attachment);
@@ -866,8 +864,7 @@ function Waymark_Map_Editor() {
 								wp.media.editor.open();
 					
 								return false;	
-
-							//Don't use media library - just read and delete
+							//No media library
 							} else {
 								//Thanks to: https://stackoverflow.com/a/24939229
 								var photo_input = jQuery('<input />')

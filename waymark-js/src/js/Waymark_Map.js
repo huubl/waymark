@@ -47,7 +47,8 @@ var waymark_js_localize = {
 	"error_file_upload" : "File upload error.",		
 	"error_photo_meta" : "Could not retrieve Photo metadata.",
 	'info_exif_yes' : "Image location metadata (EXIF) detected!",
-	'info_exif_no' : "Image location metadata (EXIF) NOT detected."
+	'info_exif_no' : "Image location metadata (EXIF) NOT detected.",
+	"error_no_wpmedia" : "WordPress Media Library not found"
 };
 
 if(typeof waymark_js === 'undefined') {

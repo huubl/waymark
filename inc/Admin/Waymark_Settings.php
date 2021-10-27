@@ -931,9 +931,9 @@ class Waymark_Settings {
 							'name' => 'media_library_uploads',
 							'id' => 'media_library_uploads',
 							'type' => 'boolean',
-							'title' => esc_html__('Media Library Uploads', 'waymark'),
+							'title' => esc_html__('Store Read Files', 'waymark'),
 							'default' => Waymark_Config::get_setting('misc', 'editor_options', 'media_library_uploads'),
-							'tip' => esc_attr__('By default Waymark does not save any files uploaded through the Editor. Using this option you can use the Media Library to store and import GPX/KML/GeoJSON files into your Map.', 'waymark')
+							'tip' => esc_attr__('By default Waymark does not store any files read using the Editor. Using this option you can use the Media Library to store the uploaded GPX/KML/GeoJSON file.', 'waymark')
 						)																	
 					)											
 				),
