@@ -7006,7 +7006,8 @@ function Waymark_Map() {
 			"handle_content_callback" : undefined,
 			"handle_delete_callback" : undefined,
 			"handle_edit_callback" : undefined,
-			"handle_custom_type_callback" : undefined			
+			"handle_custom_type_callback" : undefined,
+			"media_library_sizes" : ['thumbnail', 'medium', 'large', 'full']			
 		};
 
 		//Load user config
@@ -7840,18 +7841,19 @@ function Waymark_Map() {
 	}
 	
 	this.get_image_sizes = function(data, fallback) {
+		Waymark = this;
+				
 		var image_sizes = {};
 		
 		//Grab these
-		var sizes = ['thumbnail', 'medium', 'large', 'full'];
-		for(i in sizes) {
+		for(i in Waymark.config.media_library_sizes) {
 			//Use fallback
-			image_sizes['image_' + sizes[i] + '_url'] = fallback;
+			image_sizes['image_' + Waymark.config.media_library_sizes[i] + '_url'] = fallback;
 			
 			//We have the data we want
-			if(typeof data[sizes[i]] !== 'undefined' && typeof data[sizes[i]]['url'] !== 'undefined') {
+			if(typeof data[Waymark.config.media_library_sizes[i]] !== 'undefined' && typeof data[Waymark.config.media_library_sizes[i]]['url'] !== 'undefined') {
 				//Use it
-				image_sizes['image_' + sizes[i] + '_url'] = data[sizes[i]]['url'];
+				image_sizes['image_' + Waymark.config.media_library_sizes[i] + '_url'] = data[Waymark.config.media_library_sizes[i]]['url'];
 			}
 		}
 		
