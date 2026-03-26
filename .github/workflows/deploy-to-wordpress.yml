@@ -50,3 +50,4 @@ jobs:
           SVN_USERNAME: ${{ secrets.WORDPRESS_USERNAME }}
           SVN_PASSWORD: ${{ secrets.WORDPRESS_PASSWORD }}
           SLUG: waymark
+          VERSION: ${{ steps.version_check.outputs.current }}
