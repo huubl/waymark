@@ -45,6 +45,6 @@ jobs:
         if: steps.version_check.outputs.changed == 'true'
         uses: 10up/action-wordpress-plugin-deploy@stable
         env:
-          WORDPRESS_USERNAME: ${{ secrets.WORDPRESS_USERNAME }}
-          WORDPRESS_PASSWORD: ${{ secrets.WORDPRESS_PASSWORD }}
+          SVN_USERNAME: ${{ secrets.WORDPRESS_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.WORDPRESS_PASSWORD }}
           SLUG: waymark
