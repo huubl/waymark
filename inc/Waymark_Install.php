@@ -39,8 +39,11 @@ class Waymark_Install {
 	}
 	
 	static function do_install() {
+		//Ensure config is initialised in the activation context (before init hook fires)
+		Waymark_Config::init();
+
 		//Flush permalinks
-		$Waymark_Types = new Waymark_Types;		
+		$Waymark_Types = new Waymark_Types;
 		$Waymark_Types->register_types();
     flush_rewrite_rules();
     
@@ -78,6 +81,4 @@ class Waymark_Install {
 	    update_option('Waymark_Version', Waymark_Config::get_item('plugin_version'));		
 		}		
 	}
-}	
-
-Waymark_Install::init();
+}

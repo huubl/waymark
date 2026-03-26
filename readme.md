@@ -4,7 +4,7 @@
 **Requires at least:** 4.6  
 **Tested up to:** 6.8  
 **Requires PHP:** 5.2  
-**Stable tag:** 1.5.11  
+**Stable tag:** 1.5.12  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 **Donate link:** https://github.com/sponsors/OpenGIS  
@@ -13,7 +13,7 @@ Waymark adds powerful mapping features to WordPress that are easy to use. Create
 
 ## Description ##
 
-❤️ [Sponsor This Project](https://github.com/sponsors/OpenGIS) ❤️
+❤️ [Keep This Project Alive Through Sponsorship](https://github.com/sponsors/OpenGIS) ❤️
 
 ### Creating Maps
 
@@ -187,6 +187,11 @@ Built on the shoulders of giants, thank you Open-Source!
 
 
 ## Changelog ##
+
+### 1.5.12 ###
+
+* Fixed "Translation loading triggered too early" notice introduced in WordPress 6.7 by deferring plugin initialisation to the `init` and `plugins_loaded` hooks. [#66](https://github.com/OpenGIS/waymark-wp/issues/66)
+* Deploy to wordpress.org plugin directory via GitHub Actions
 
 ### 1.5.11 ###
 

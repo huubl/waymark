@@ -726,38 +726,29 @@ div#waymark-admin-container {
  * ====================================
  */
 div#waymark-notice-container {
-	/* Survey Callout */
-	&.survey-callout {
-		width: 100%;
-		margin-top: 5px;
-		padding: 5px 10px;
-		display: flex;
-		align-items: center;
-		color: #fff;
-		border: 1px solid #fff;
+	background: #fff !important;
 
-		background: @waymark-primary;
+	/* Plugin Callout */
+	&.plugin-callout {
+		position: relative;
+		margin-top: 5px;
+		padding: 5px 10px 5px 50px;
+		align-items: center;
+		// color: #fff;
+		border: 5px solid @waymark-primary;
 
 		a {
-			color: #fff;
+			// color: #fff;
 		}
 
-		.pro-logo {
-			margin-right: 15px;
-			display: flex;
-			align-items: center;
+		.logo {
+			position: absolute;
+			top: 7px;
+			left: 7px;
+		}
 
-			span {
-				padding: 2px 4px;
-				border-radius: 3px;
-				border: 1px solid #fff;
-				display: inline-block;
-				font-size: 16px;
-				margin-left: 4px;
-				font-weight: bold;
-				// color: #000;
-				// background: #fff;
-			}
+		p {
+			line-height: 0.9em;
 		}
 	}
 

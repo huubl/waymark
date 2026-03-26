@@ -6,6 +6,11 @@ class Waymark_Taxonomies
 
     public function __construct()
     {
+        add_action('init', [$this, 'register_taxonomies']);
+    }
+
+    public function register_taxonomies()
+    {
         $this->taxonomies = [
             [
                 'key'  => 'waymark_collection',
@@ -49,14 +54,8 @@ class Waymark_Taxonomies
             ],
         ];
 
-        add_action('init', [$this, 'register_taxonomies']);
-    }
-
-    public function register_taxonomies()
-    {
         foreach ($this->taxonomies as $taxonomy) {
             register_taxonomy($taxonomy['key'], $taxonomy['type'], $taxonomy['args']);
         }
     }
 }
-new Waymark_Taxonomies;

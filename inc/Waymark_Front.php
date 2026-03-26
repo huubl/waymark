@@ -24,4 +24,3 @@ class Waymark_Front {
 		echo '<meta name="' . esc_attr(Waymark_Config::get_name(true, true)) . ' Version" content="' . esc_attr(Waymark_Config::get_version()) . '" />' . "\n";
 	}
 }
-new Waymark_Front;

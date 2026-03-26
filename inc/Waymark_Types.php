@@ -4,6 +4,10 @@ class Waymark_Types {
 	private $types;
 
 	function __construct() {
+		add_action('init', array($this, 'register_types'), 0);
+	}
+
+	function register_types() {
 		$this->types = array(
 			//Map
 			'waymark_map' => array(
@@ -80,15 +84,9 @@ class Waymark_Types {
 		//Add Featured Image Support
 		add_theme_support('post-thumbnails', array('waymark_map'));
 
-		add_action('init', array($this, 'register_types'), 0);
-	}
-
-	function register_types() {
 		$types = array();
-
 		foreach ($this->types as $type_id => $type_data) {
 			$types[] = $type_id;
-
 			register_post_type($type_id, $type_data);
 		}
 
@@ -111,4 +109,3 @@ class Waymark_Types {
 		}
 	}
 }
-new Waymark_Types;

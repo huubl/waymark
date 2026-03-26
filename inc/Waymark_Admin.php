@@ -221,6 +221,19 @@ class Waymark_Admin {
 
 		}
 
+		// START Plugin Callout
+		if ($title || $this->current_screen->base == 'waymark_page_waymark-settings') {
+			echo '<div id="waymark-notice-container" class="plugin-callout">' . "\n";
+			echo '	<div class="logo">' . Waymark_Helper::logo('primary', 32, 32) . ' </div>' . "\n";
+			echo '	<p class="lead">Waymark currently has <strong>ONE</strong> sponsor. Software takes time and effort to maintain. If you like this plugin:</p>' . "\n";
+			echo '	<p style="font-size:150%">Help <strong>keep it alive <a href="https://github.com/sponsors/OpenGIS">Through Sponsorship</a>!</strong></p>' . "\n";
+			echo '	<p>Thank you <a href="https://github.com/infester86">infester86</a>! ❤️</p>' . "\n";
+			echo '</div>' . "\n";
+
+			return;
+		}
+		// END Plugin Callout
+
 		if ($title || $description) {
 			echo '<div id="waymark-notice-container" class="wrap">' . "\n";
 			echo '	<div class="card">' . "\n";
@@ -327,4 +340,3 @@ class Waymark_Admin {
 // 		return $check;
 // 	}
 }
-new Waymark_Admin;

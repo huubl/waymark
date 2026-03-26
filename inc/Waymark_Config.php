@@ -11,7 +11,7 @@ class Waymark_Config {
 			'plugin_name' => 'Waymark',
 			'plugin_name_short' => 'Waymark',
 			'custom_types' => [],
-			'plugin_version' => '1.5.11',
+			'plugin_version' => '1.5.12',
 			'nonce_string' => 'Waymark_Nonce',
 			'site_url' => 'https://www.ogis.org/waymark-wp/',
 			'directory_url' => 'https://wordpress.org/support/plugin/waymark/',
@@ -422,5 +422,3 @@ class Waymark_Config {
 	}
 
 }
-
-Waymark_Config::init();

@@ -638,34 +638,23 @@ div#waymark-admin-container #waymark-about a.button {
  * ====================================
  */
 div#waymark-notice-container {
-  /* Survey Callout */
+  background: #fff !important;
+  /* Plugin Callout */
 }
-div#waymark-notice-container.survey-callout {
-  width: 100%;
+div#waymark-notice-container.plugin-callout {
+  position: relative;
   margin-top: 5px;
-  padding: 5px 10px;
-  display: flex;
+  padding: 5px 10px 5px 50px;
   align-items: center;
-  color: #fff;
-  border: 1px solid #fff;
-  background: #b42714;
+  border: 5px solid #b42714;
 }
-div#waymark-notice-container.survey-callout a {
-  color: #fff;
+div#waymark-notice-container.plugin-callout .logo {
+  position: absolute;
+  top: 7px;
+  left: 7px;
 }
-div#waymark-notice-container.survey-callout .pro-logo {
-  margin-right: 15px;
-  display: flex;
-  align-items: center;
-}
-div#waymark-notice-container.survey-callout .pro-logo span {
-  padding: 2px 4px;
-  border-radius: 3px;
-  border: 1px solid #fff;
-  display: inline-block;
-  font-size: 16px;
-  margin-left: 4px;
-  font-weight: bold;
+div#waymark-notice-container.plugin-callout p {
+  line-height: 0.9em;
 }
 div#waymark-notice-container .card {
   max-width: none;
