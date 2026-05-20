@@ -225,9 +225,9 @@ class Waymark_Admin {
 		if ($title || $this->current_screen->base == 'waymark_page_waymark-settings') {
 			echo '<div id="waymark-notice-container" class="plugin-callout">' . "\n";
 			echo '	<div class="logo">' . Waymark_Helper::logo('primary', 32, 32) . ' </div>' . "\n";
-			echo '	<p class="lead">Waymark currently has <strong>ONE</strong> sponsor. Software takes time and effort to maintain. If you like this plugin:</p>' . "\n";
-			echo '	<p style="font-size:150%">Help <strong>keep it alive <a href="https://github.com/sponsors/OpenGIS">Through Sponsorship</a>!</strong></p>' . "\n";
-			echo '	<p>Thank you <a href="https://github.com/infester86">infester86</a>! ❤️</p>' . "\n";
+			echo '	<p class="lead">Waymark currently has <strong>TWO</strong> sponsors. Software takes time and effort to maintain. If you like this plugin:</p>' . "\n";
+			echo '	<p style="font-size:150%">Help <strong>keep it alive <a href="https://github.com/sponsors/OpenGIS">Through Sponsorship</a>.</strong></p>' . "\n";
+			echo '	<p>Thank you <a href="https://github.com/infester86">infester86</a> & <a href="https://github.com/jhmnieuwenhuis">jhmnieuwenhuis</a> ! ❤️</p>' . "\n";
 			echo '</div>' . "\n";
 
 			return;

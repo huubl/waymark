@@ -2,9 +2,9 @@
 **Contributors:** [morehawes](https://profiles.wordpress.org/morehawes/)  
 **Tags:** GIS, Map maker, GPX, Track, Elevation  
 **Requires at least:** 4.6  
-**Tested up to:** 6.8  
+**Tested up to:** 7.0  
 **Requires PHP:** 5.2  
-**Stable tag:** 1.5.14  
+**Stable tag:** 1.5.15  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 **Donate link:** https://github.com/sponsors/OpenGIS  
@@ -188,6 +188,10 @@ Built on the shoulders of giants, thank you Open-Source!
 
 ## Changelog ##
 
+### 1.5.15 ###
+
+* Minor improvements.
+
 ### 1.5.12/13/14 ###
 
 * Fixed "Translation loading triggered too early" notice introduced in WordPress 6.7 by deferring plugin initialisation to the `init` and `plugins_loaded` hooks. [#66](https://github.com/OpenGIS/waymark-wp/issues/66)
@@ -195,7 +199,7 @@ Built on the shoulders of giants, thank you Open-Source!
 
 ### 1.5.11 ###
 
-Updated Waymark Website URLs.
+* Updated Waymark Website URLs.
 
 ### 1.5.10 ###
 

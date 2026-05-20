@@ -1,6 +1,6 @@
 {
   "name": "Waymark",
-  "version": "1.5.14",
+  "version": "1.5.15",
   "description": "Waymark for WordPress",
   "author": "Joe Hawes",
   "main": "Gruntfile.js",
