@@ -280,8 +280,13 @@ class Waymark_Admin {
 	}
 
 	public function upload_mimes($existing_mimes) {
+		//Don't filter if current_screen is not set (e.g., AJAX uploads)
+		if (!$this->current_screen) {
+			return $existing_mimes;
+		}
+
 		//Don't do this for admin pages not related to Waymark
-		if ($this->current_screen && $this->current_screen->post_type != 'waymark_map') {
+		if ($this->current_screen->post_type != 'waymark_map') {
 			return $existing_mimes;
 		}
 
