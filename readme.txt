@@ -106,6 +106,23 @@ Pull requests are welcome!
 > [!IMPORTANT]
 > [Waymark JS](https://www.ogis.org/waymark-js/) is responsible for the Viewer and Editor and is included as a Git submodule (`/waymark-js` directory). View on [GitHub](https://github.com/OpenGIS/Waymark-JS/).
 
+### Dev Server
+
+A local WordPress environment is provided via [wp-env](https://www.npmjs.com/package/@wordpress/env). [Docker](https://www.docker.com/) must be running.
+
+`
+npm run dev
+`
+
+This starts WordPress at **http://localhost:8888** and prints the credentials summary:
+
+`
+────────────────────────────────────
+ MySQL  127.0.0.1  root / password
+ Admin  http://localhost:8888/wp-admin  admin / password
+────────────────────────────────────
+`
+
 == Installation ==
 
 [vimeo https://vimeo.com/349575095]
