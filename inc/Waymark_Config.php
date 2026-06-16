@@ -11,7 +11,7 @@ class Waymark_Config {
 			'plugin_name' => 'Waymark',
 			'plugin_name_short' => 'Waymark',
 			'custom_types' => [],
-			'plugin_version' => '1.5.16',
+			'plugin_version' => get_file_data(dirname(__DIR__) . '/Waymark.php', ['Version' => 'Version'])['Version'],
 			'nonce_string' => 'Waymark_Nonce',
 			'site_url' => 'https://www.ogis.org/waymark-wp/',
 			'directory_url' => 'https://wordpress.org/support/plugin/waymark/',
